@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us</title>
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: #f5f7fb;
+            color: #17191f;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 21px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #17191f;
+        }
+
+        .brand img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            border-radius: 9px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #626773;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #17191f;
+        }
+
+        .nav-links .active {
+            color: #17191f;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 75px 20px 50px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #eaf2ff;
+            color: #2764d8;
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 6vw, 58px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            color: #6b707c;
+            font-size: 17px;
+            line-height: 1.65;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .features-container {
+            width: min(1100px, 90%);
+            margin: 0 auto 80px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid #e6e8ed;
+            border-radius: 18px;
+            padding: 27px;
+            min-height: 205px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(20, 25, 35, 0.07);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: #f0f4fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h2 {
+            font-size: 17px;
+            margin-bottom: 9px;
+        }
+
+        .feature-card p {
+            color: #707581;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .notice {
+            width: min(1100px, 90%);
+            margin: 0 auto 80px;
+            background: #ffffff;
+            border: 1px solid #e6e8ed;
+            border-radius: 18px;
+            padding: 25px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .notice-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notice h3 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .notice p {
+            color: #707581;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        footer {
+            border-top: 1px solid #e5e7eb;
+            background: #ffffff;
+            text-align: center;
+            padding: 28px 20px;
+            color: #8a8f99;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .navbar {
+                height: 64px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .brand img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 55px 18px 40px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                min-height: auto;
+            }
+
+            .notice {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand">
+            <img src="logo.png" alt="Logo">
+            <span>Ledger</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="features.html" class="active">Features</a>
+            <a href="account.html">Account</a>
+        </div>
+    </nav>
+
+    <main>
+
+        <section class="hero">
+            <div class="hero-badge">TRACK YOUR MONEY</div>
+
+            <h1>Everything you need to track your money.</h1>
+
+            <p>
+                Keep your accounts, balances and transactions organized
+                in one simple place. No real money is moved or transferred.
+            </p>
+        </section>
+
+        <section class="features-container">
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h2>Multiple Accounts</h2>
+                    <p>
+                        Start with a chequing account and add savings,
+                        other accounts, or your own custom account names.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h2>Track Your Balance</h2>
+                    <p>
+                        See exactly how much money is being tracked across
+                        all of your accounts from one dashboard.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">↔️</div>
+                    <h2>Transfer Funds</h2>
+                    <p>
+                        Move tracked funds between any of your accounts
+                        while keeping your balances organized.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h2>Send Money</h2>
+                    <p>
+                        Simulate sending money to another person. The
+                        selected amount is removed from your tracked balance
+                        and a confirmation is displayed.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🧾</div>
+                    <h2>Deposit Cheques</h2>
+                    <p>
+                        Add funds to your tracked account by recording
+                        a simulated cheque deposit.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h2>Transaction History</h2>
+                    <p>
+                        Review your recent account activity. Your latest
+                        15 transactions are kept for easy reference.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h2>Account Tokens</h2>
+                    <p>
+                        Your account information can be saved into a
+                        personal token that you can copy and store for later.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h2>Save Your Account</h2>
+                    <p>
+                        Copy your current token before signing out and
+                        use it later to restore your tracked account.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">➕</div>
+                    <h2>Custom Accounts</h2>
+                    <p>
+                        Create accounts with your own names. Duplicate
+                        account names are automatically prevented.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🏦</div>
+                    <h2>Savings Account</h2>
+                    <p>
+                        Apply for a simulated savings account and receive
+                        a starting balance of $5.00 along with an Other account.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h2>Live Token Updates</h2>
+                    <p>
+                        Your token reflects your current balances and
+                        account information as you make changes.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h2>Works Everywhere</h2>
+                    <p>
+                        The dashboard is designed to automatically scale
+                        between phones, tablets, laptops and desktop screens.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="notice">
+            <div class="notice-icon">ℹ️</div>
+
+            <div>
+                <h3>A money tracking tool, not a real bank</h3>
+                <p>
+                    This website does not connect to banks, financial
+                    institutions or payment networks. Sending money,
+                    depositing cheques and transferring funds are simulated
+                    actions that only change your tracked account data.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        Ledger &nbsp;•&nbsp; Personal Money Tracker
+    </footer>
+
+</body>
+</html>

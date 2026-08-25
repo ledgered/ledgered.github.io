@@ -1,0 +1,4255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#08090c">
+<link rel="icon" type="image/png" href="logo.png">
+
+<title>Ledger — Account</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #08090c;
+    --panel: #111319;
+    --panel-2: #151820;
+    --border: rgba(255,255,255,.075);
+
+    --text: #f5f7fa;
+    --muted: #858b97;
+    --muted-2: #606671;
+
+    --blue: #5c75ff;
+    --green: #35d399;
+    --red: #ff6574;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.background::before {
+    content: "";
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    border-radius: 50%;
+
+    background: rgba(63,91,255,.075);
+
+    filter: blur(120px);
+
+    top: -350px;
+    right: -150px;
+}
+
+.background::after {
+    content: "";
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    background: rgba(53,211,153,.035);
+
+    filter: blur(120px);
+
+    bottom: -250px;
+    left: -200px;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen {
+    position: fixed;
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(8,9,12,.97);
+}
+
+.login-box {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    background: rgba(17,19,25,.96);
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.55);
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 30px;
+
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.brand-icon {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #3868ff,
+            #2445bc
+        );
+}
+
+.brand-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.login-box h1 {
+    margin-bottom: 8px;
+
+    font-size: 28px;
+
+    letter-spacing: -1px;
+}
+
+.login-description {
+    margin-bottom: 26px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.field {
+    margin-bottom: 17px;
+}
+
+.field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #b7bbc4;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    height: 47px;
+
+    padding: 0 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #0c0e13;
+    color: var(--text);
+
+    font-size: 14px;
+}
+
+.field textarea {
+    width: 100%;
+    min-height: 105px;
+
+    padding: 12px 13px;
+
+    resize: vertical;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #0c0e13;
+    color: #aeb5ff;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: rgba(92,117,255,.65);
+
+    box-shadow:
+        0 0 0 3px rgba(92,117,255,.09);
+}
+
+.field small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--muted-2);
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.login-button {
+    width: 100%;
+    height: 48px;
+
+    margin-top: 7px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #f4f6fa;
+    color: #08090c;
+
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.login-button:hover {
+    background: white;
+}
+
+.login-note {
+    margin-top: 17px;
+
+    color: #5f6570;
+
+    text-align: center;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   APPLICATION
+========================================================= */
+
+#app {
+    display: none;
+
+    position: relative;
+    z-index: 1;
+}
+
+nav {
+    width: min(1240px, calc(100% - 40px));
+    height: 72px;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 19px;
+    font-weight: 750;
+
+    letter-spacing: -.5px;
+}
+
+.nav-brand .brand-icon {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 9px;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.user-name {
+    color: #bfc3cb;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.signout-button {
+    height: 35px;
+
+    padding: 0 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.025);
+    color: #9da2ad;
+
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.signout-button:hover {
+    background: rgba(255,255,255,.06);
+    color: white;
+}
+
+.container {
+    width: min(1240px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+    padding: 35px 0 60px;
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.welcome {
+    height: 58px;
+
+    margin-bottom: 24px;
+}
+
+.welcome-label {
+    margin-bottom: 5px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.welcome h1 {
+    font-size: 30px;
+
+    letter-spacing: -1.2px;
+}
+
+
+/* =========================================================
+   DASHBOARD GRID
+
+   IMPORTANT:
+   Both dashboard cards have a fixed height.
+
+   Therefore:
+   - account list cannot stretch the card
+   - balance card cannot stretch
+   - grid cannot drift
+========================================================= */
+
+.dashboard-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.55fr)
+        minmax(280px, .8fr);
+
+    gap: 17px;
+
+    align-items: start;
+
+    /*
+        Prevent grid children from imposing
+        unexpected minimum sizes.
+    */
+    min-height: 0;
+}
+
+
+/* =========================================================
+   GENERIC CARD
+========================================================= */
+
+.card {
+    min-width: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: rgba(17,19,25,.82);
+}
+
+
+/* =========================================================
+   AVAILABLE BALANCE
+
+   THIS CARD DOES NOT SCROLL.
+
+   It is intentionally fixed.
+========================================================= */
+
+.balance-card {
+    position: relative;
+
+    height: 225px;
+    min-height: 225px;
+    max-height: 225px;
+
+    padding: 25px;
+
+    overflow: hidden;
+}
+
+.balance-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    border-radius: 50%;
+
+    right: -100px;
+    top: -150px;
+
+    background: rgba(92,117,255,.075);
+
+    filter: blur(15px);
+}
+
+.balance-label {
+    position: relative;
+    z-index: 1;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.total-balance {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 8px;
+
+    font-size: clamp(38px,5vw,54px);
+
+    font-weight: 720;
+
+    letter-spacing: -2.8px;
+
+    line-height: 1.05;
+}
+
+.balance-sub {
+    position: relative;
+    z-index: 1;
+
+    margin-top: 7px;
+
+    color: #666c77;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+
+   Anchored to bottom.
+   They cannot be pushed around by anything else.
+========================================================= */
+
+.quick-actions {
+    position: absolute;
+
+    left: 25px;
+    right: 25px;
+    bottom: 23px;
+
+    z-index: 2;
+
+    display: flex;
+
+    gap: 8px;
+}
+
+.action-button {
+    height: 39px;
+
+    padding: 0 13px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.04);
+    color: #d6d9df;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+.action-button:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.action-button.primary {
+    border-color: transparent;
+
+    background: #f1f3f7;
+    color: #08090c;
+}
+
+.action-button.primary:hover {
+    background: white;
+}
+
+.action-button svg {
+    width: 14px;
+    height: 14px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   YOUR ACCOUNTS SUMMARY CARD
+
+   FIXED HEIGHT.
+
+   The list INSIDE scrolls.
+   The card itself never grows.
+========================================================= */
+
+.account-summary {
+    height: 225px;
+    min-height: 225px;
+    max-height: 225px;
+
+    padding: 23px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.card-heading {
+    height: 20px;
+
+    flex-shrink: 0;
+
+    margin-bottom: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-heading h2 {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.card-heading span {
+    color: var(--muted-2);
+
+    font-size: 10px;
+}
+
+
+/*
+    THIS is the scrolling account list.
+
+    The card stays exactly the same height.
+*/
+
+#miniAccounts {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 7px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #454b58 #0c0e12;
+}
+
+#miniAccounts::-webkit-scrollbar {
+    width: 7px;
+}
+
+#miniAccounts::-webkit-scrollbar-track {
+    background: #0c0e12;
+    border-radius: 10px;
+}
+
+#miniAccounts::-webkit-scrollbar-thumb {
+    background: #454b58;
+    border-radius: 10px;
+}
+
+#miniAccounts::-webkit-scrollbar-thumb:hover {
+    background: #5d6472;
+}
+
+
+.mini-account {
+    min-height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 8px 0;
+
+    border-top: 1px solid rgba(255,255,255,.045);
+}
+
+.mini-account:first-child {
+    border-top: 0;
+}
+
+.account-circle {
+    width: 32px;
+    height: 32px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.05);
+    color: #a5adff;
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.mini-account-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.mini-account-name {
+    overflow: hidden;
+
+    color: #d6d9df;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mini-account-type {
+    margin-top: 2px;
+
+    color: #646a75;
+
+    font-size: 9px;
+}
+
+.mini-account-balance {
+    flex-shrink: 0;
+
+    font-size: 11px;
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   LOWER GRID
+
+   FIXED CARD HEIGHTS.
+   BOTH INTERNAL LISTS SCROLL.
+
+   NOTHING ABOVE CAN PUSH THIS SECTION DOWN.
+========================================================= */
+
+.main-grid {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.45fr)
+        minmax(280px, .7fr);
+
+    gap: 17px;
+
+    margin-top: 17px;
+
+    align-items: start;
+
+    min-height: 0;
+}
+
+
+/* =========================================================
+   ACCOUNTS CARD
+
+   FIXED HEIGHT.
+========================================================= */
+
+.accounts-card {
+    height: 455px;
+    min-height: 455px;
+    max-height: 455px;
+
+    padding: 23px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/*
+    The actual account list scrolls.
+*/
+
+#accountsList {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 7px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #454b58 #0c0e12;
+}
+
+#accountsList::-webkit-scrollbar {
+    width: 7px;
+}
+
+#accountsList::-webkit-scrollbar-track {
+    background: #0c0e12;
+    border-radius: 10px;
+}
+
+#accountsList::-webkit-scrollbar-thumb {
+    background: #454b58;
+    border-radius: 10px;
+}
+
+#accountsList::-webkit-scrollbar-thumb:hover {
+    background: #5d6472;
+}
+
+
+.account-row {
+    min-height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 13px 0;
+
+    border-top: 1px solid rgba(255,255,255,.045);
+}
+
+.account-row:first-child {
+    border-top: 0;
+}
+
+.account-row .account-circle {
+    width: 39px;
+    height: 39px;
+
+    border-radius: 11px;
+
+    font-size: 12px;
+}
+
+.account-row-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.account-row-name {
+    overflow: hidden;
+
+    color: #d6d9df;
+
+    font-size: 13px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-row-type {
+    margin-top: 3px;
+
+    color: #676d78;
+
+    font-size: 9px;
+}
+
+.account-row-balance {
+    flex-shrink: 0;
+
+    font-size: 13px;
+    font-weight: 680;
+}
+
+.account-row-actions {
+    display: flex;
+
+    gap: 5px;
+}
+
+.tiny-button {
+    height: 30px;
+
+    padding: 0 8px;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    background: rgba(255,255,255,.025);
+    color: #858b96;
+
+    font-size: 9px;
+    font-weight: 650;
+}
+
+.tiny-button:hover {
+    background: rgba(255,255,255,.06);
+    color: white;
+}
+
+
+/*
+    Add account button is NOT inside the scrolling list.
+
+    It stays permanently at the bottom.
+*/
+
+.add-account {
+    width: 100%;
+    height: 39px;
+
+    flex-shrink: 0;
+
+    margin-top: 10px;
+
+    border: 1px dashed rgba(255,255,255,.12);
+    border-radius: 9px;
+
+    background: transparent;
+    color: #747a86;
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.add-account:hover {
+    border-color: rgba(255,255,255,.2);
+
+    color: #b8bdc6;
+}
+
+
+/* =========================================================
+   TRANSACTIONS CARD
+
+   FIXED HEIGHT.
+========================================================= */
+
+.transactions-card {
+    height: 455px;
+    min-height: 455px;
+    max-height: 455px;
+
+    padding: 23px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/*
+    Fixed-height transaction viewport.
+*/
+
+.transactions-list {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 7px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #454b58 #0c0e12;
+}
+
+.transactions-list::-webkit-scrollbar {
+    width: 7px;
+}
+
+.transactions-list::-webkit-scrollbar-track {
+    background: #0c0e12;
+    border-radius: 10px;
+}
+
+.transactions-list::-webkit-scrollbar-thumb {
+    background: #454b58;
+    border-radius: 10px;
+}
+
+.transactions-list::-webkit-scrollbar-thumb:hover {
+    background: #5d6472;
+}
+
+
+.transaction {
+    min-height: 59px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 11px 0;
+
+    border-top: 1px solid rgba(255,255,255,.045);
+}
+
+.transaction:first-child {
+    border-top: 0;
+}
+
+.transaction-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.045);
+    color: #a0a6b1;
+}
+
+.transaction-icon.in {
+    background: rgba(53,211,153,.07);
+    color: var(--green);
+}
+
+.transaction-icon.out {
+    background: rgba(255,101,116,.07);
+    color: var(--red);
+}
+
+.transaction-icon svg {
+    width: 15px;
+    height: 15px;
+}
+
+.transaction-info {
+    min-width: 0;
+
+    flex: 1;
+}
+
+.transaction-title {
+    overflow: hidden;
+
+    color: #d2d5db;
+
+    font-size: 10px;
+    font-weight: 650;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transaction-date {
+    margin-top: 3px;
+
+    overflow: hidden;
+
+    color: #606671;
+
+    font-size: 8px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.transaction-amount {
+    flex-shrink: 0;
+
+    font-size: 10px;
+    font-weight: 680;
+}
+
+.transaction-amount.in {
+    color: var(--green);
+}
+
+.transaction-amount.out {
+    color: var(--red);
+}
+
+.empty-transactions {
+    padding: 35px 10px;
+
+    color: #5e646f;
+
+    text-align: center;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 50;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(0,0,0,.68);
+
+    backdrop-filter: blur(8px);
+}
+
+.modal {
+    width: 100%;
+    max-width: 430px;
+
+    max-height: calc(100vh - 36px);
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: #111319;
+
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.6);
+}
+
+.modal h2 {
+    margin-bottom: 7px;
+
+    font-size: 19px;
+
+    letter-spacing: -.5px;
+}
+
+.modal-description {
+    margin-bottom: 21px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.modal-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.modal-button {
+    flex: 1;
+
+    height: 40px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.04);
+    color: #c9cdd4;
+
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.modal-button:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.modal-button.primary {
+    border: 0;
+
+    background: #f1f3f7;
+    color: #08090c;
+}
+
+.modal-button.danger {
+    border-color: rgba(255,101,116,.18);
+
+    color: #ff7b87;
+}
+
+.token-display {
+    width: 100%;
+    min-height: 105px;
+
+    padding: 11px;
+
+    resize: vertical;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #0b0d11;
+    color: #aeb5ff;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Consolas,
+        monospace;
+
+    font-size: 9px;
+    line-height: 1.5;
+
+    word-break: break-all;
+}
+
+.copy-token {
+    width: 100%;
+    height: 39px;
+
+    margin-top: 8px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.04);
+    color: #c8ccd5;
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.copy-token:hover {
+    background: rgba(255,255,255,.08);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toastContainer {
+    position: fixed;
+
+    z-index: 200;
+
+    right: 22px;
+    bottom: 22px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 9px;
+
+    pointer-events: none;
+}
+
+.toast {
+    max-width: 350px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+
+    background: #151820;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.45);
+
+    animation:
+        toastIn .25s ease forwards;
+}
+
+.toast.success {
+    border-color: rgba(53,211,153,.18);
+}
+
+.toast.error {
+    border-color: rgba(255,101,116,.18);
+}
+
+.toast-icon {
+    width: 27px;
+    height: 27px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 8px;
+
+    background: rgba(53,211,153,.1);
+    color: var(--green);
+}
+
+.toast.error .toast-icon {
+    background: rgba(255,101,116,.1);
+    color: var(--red);
+}
+
+.toast-text {
+    color: #d6d9df;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+@keyframes toastIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    /*
+        On smaller screens the dashboard stacks,
+        but each card STILL has its own fixed height.
+    */
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /*
+        Slightly taller summary on stacked layouts,
+        while remaining fixed.
+    */
+
+    .account-summary {
+        height: 225px;
+        min-height: 225px;
+        max-height: 225px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    nav,
+    .container {
+        width: calc(100% - 28px);
+    }
+
+    nav {
+        height: 64px;
+    }
+
+    .container {
+        padding-top: 26px;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .welcome {
+        height: 52px;
+    }
+
+    .welcome h1 {
+        font-size: 26px;
+    }
+
+
+    /*
+        BALANCE CARD
+
+        Still no scrollbar.
+        Still fixed.
+    */
+
+    .balance-card {
+        height: 235px;
+        min-height: 235px;
+        max-height: 235px;
+
+        padding: 20px;
+    }
+
+    .quick-actions {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+    }
+
+    .action-button {
+        flex: 1;
+
+        padding: 0 7px;
+    }
+
+
+    /*
+        SUMMARY ACCOUNT CARD
+    */
+
+    .account-summary {
+        height: 235px;
+        min-height: 235px;
+        max-height: 235px;
+
+        padding: 18px;
+    }
+
+
+    /*
+        LOWER CARDS
+    */
+
+    .accounts-card,
+    .transactions-card {
+        height: 430px;
+        min-height: 430px;
+        max-height: 430px;
+
+        padding: 18px;
+    }
+
+
+    .account-row-actions .tiny-button {
+        display: none;
+    }
+
+
+    .login-box {
+        padding: 24px 20px;
+    }
+
+
+    #toastContainer {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+
+        align-items: stretch;
+    }
+
+    .toast {
+        max-width: none;
+    }
+
+}
+
+
+@media (max-width: 390px) {
+
+    .total-balance {
+        font-size: 35px;
+    }
+
+    .action-button {
+        font-size: 9px;
+    }
+
+    .action-button svg {
+        display: none;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="background"></div>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-brand">
+
+            <div class="brand-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.3"
+                >
+                    <path d="M4 19V9l8-5 8 5v10"/>
+                    <path d="M8 19v-6h8v6"/>
+                    <path d="M3 19h18"/>
+                </svg>
+
+            </div>
+
+            Ledger
+
+        </div>
+
+
+        <h1>
+            Open your ledger
+        </h1>
+
+
+        <p class="login-description">
+
+            Enter your name and your Ledger token.
+            If you don't have a token yet, leave it
+            empty and a new account will be created.
+
+        </p>
+
+
+        <div class="field">
+
+            <label for="loginName">
+                YOUR NAME
+            </label>
+
+            <input
+                id="loginName"
+                type="text"
+                maxlength="60"
+                autocomplete="off"
+                placeholder="e.g. Alex"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                LEDGER TOKEN
+                <span style="color:#555b65;">
+                    (OPTIONAL)
+                </span>
+            </label>
+
+            <textarea
+                id="loginToken"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="Paste your saved Ledger token here..."
+            ></textarea>
+
+            <small>
+                Your token is your account backup.
+                Save it somewhere safe if you want
+                to return to this account later.
+            </small>
+
+        </div>
+
+
+        <button
+            class="login-button"
+            onclick="openLedger()"
+        >
+            Continue
+        </button>
+
+
+        <p class="login-note">
+
+            Ledger is a personal tracking tool.
+            It does not connect to banks, move real
+            money, or process payments.
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APP
+===================================================== -->
+
+<div id="app">
+
+    <nav>
+
+        <div class="nav-brand">
+
+            <div class="brand-icon">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.3"
+                >
+                    <path d="M4 19V9l8-5 8 5v10"/>
+                    <path d="M8 19v-6h8v6"/>
+                    <path d="M3 19h18"/>
+                </svg>
+
+            </div>
+
+            Ledger
+
+        </div>
+
+
+        <div class="nav-user">
+
+            <span
+                class="user-name"
+                id="navUserName"
+            ></span>
+
+            <button
+                class="signout-button"
+                onclick="signOut()"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <div class="container">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================= -->
+
+        <div class="welcome">
+
+            <div class="welcome-label">
+                PERSONAL LEDGER
+            </div>
+
+            <h1 id="welcomeText">
+                Welcome back.
+            </h1>
+
+        </div>
+
+
+        <!-- =================================================
+             TOP DASHBOARD GRID
+        ================================================= -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- =============================================
+                 AVAILABLE BALANCE
+            ============================================== -->
+
+            <div class="card balance-card">
+
+                <div class="balance-label">
+                    AVAILABLE ACROSS ALL ACCOUNTS
+                </div>
+
+
+                <div
+                    class="total-balance"
+                    id="totalBalance"
+                >
+                    $0.00
+                </div>
+
+
+                <div class="balance-sub">
+                    This is your combined tracked balance.
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <button
+                        class="action-button primary"
+                        onclick="openModal('sendModal')"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M22 2 11 13"/>
+                            <path d="m22 2-7 20-4-9-9-4Z"/>
+                        </svg>
+
+                        Send money
+
+                    </button>
+
+
+                    <button
+                        class="action-button"
+                        onclick="openModal('depositModal')"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M12 5v14"/>
+                            <path d="m5 12 7 7 7-7"/>
+                        </svg>
+
+                        Deposit cheque
+
+                    </button>
+
+
+                    <button
+                        class="action-button"
+                        onclick="openModal('transferModal')"
+                    >
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M7 7h13l-3-3"/>
+                            <path d="M17 17H4l3 3"/>
+                        </svg>
+
+                        Transfer
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 YOUR ACCOUNTS
+
+                 IMPORTANT:
+                 Fixed card.
+                 ONLY #miniAccounts scrolls.
+            ============================================== -->
+
+            <div class="card account-summary">
+
+                <div class="card-heading">
+
+                    <h2>
+                        Your accounts
+                    </h2>
+
+                    <span id="accountCount">
+                        1 ACCOUNT
+                    </span>
+
+                </div>
+
+
+                <div id="miniAccounts"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOWER GRID
+        ================================================= -->
+
+        <div class="main-grid">
+
+
+            <!-- =============================================
+                 ACCOUNTS
+            ============================================== -->
+
+            <div class="card accounts-card">
+
+                <div class="card-heading">
+
+                    <h2>
+                        Accounts
+                    </h2>
+
+                    <span>
+                        YOUR MONEY
+                    </span>
+
+                </div>
+
+
+                <!--
+                    ONLY THIS PART SCROLLS.
+                -->
+
+                <div id="accountsList"></div>
+
+
+                <!--
+                    Permanently anchored to bottom.
+                -->
+
+                <button
+                    class="add-account"
+                    onclick="openModal('addAccountModal')"
+                >
+                    + Add another account
+                </button>
+
+            </div>
+
+
+            <!-- =============================================
+                 TRANSACTIONS
+            ============================================== -->
+
+            <div class="card transactions-card">
+
+                <div class="card-heading">
+
+                    <h2>
+                        Recent activity
+                    </h2>
+
+                    <span id="transactionCount">
+                        0 / 15
+                    </span>
+
+                </div>
+
+
+                <!--
+                    ONLY THIS PART SCROLLS.
+                -->
+
+                <div
+                    class="transactions-list"
+                    id="transactionsList"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SEND MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="sendModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Send money
+        </h2>
+
+        <p class="modal-description">
+
+            This simulates sending money.
+            No real payment will be made.
+            The amount will simply be removed
+            from the account you choose.
+
+        </p>
+
+
+        <div class="field">
+
+            <label>
+                FROM ACCOUNT
+            </label>
+
+            <select id="sendAccount"></select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                RECIPIENT
+            </label>
+
+            <input
+                id="sendRecipient"
+                type="text"
+                maxlength="60"
+                placeholder="Person or business"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                AMOUNT
+            </label>
+
+            <input
+                id="sendAmount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+            >
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button"
+                onclick="closeModal('sendModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="sendMoney()"
+            >
+                Send money
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     DEPOSIT MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="depositModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Deposit a cheque
+        </h2>
+
+        <p class="modal-description">
+
+            Record a cheque deposit by choosing
+            an account and entering the amount.
+            This instantly adds the amount to
+            your tracked balance.
+
+        </p>
+
+
+        <div class="field">
+
+            <label>
+                DEPOSIT INTO
+            </label>
+
+            <select id="depositAccount"></select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                AMOUNT
+            </label>
+
+            <input
+                id="depositAmount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                DESCRIPTION
+                <span style="color:#555b65;">
+                    (OPTIONAL)
+                </span>
+            </label>
+
+            <input
+                id="depositDescription"
+                type="text"
+                maxlength="60"
+                placeholder="e.g. Paycheque"
+            >
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button"
+                onclick="closeModal('depositModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="depositCheque()"
+            >
+                Deposit
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TRANSFER MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="transferModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Transfer funds
+        </h2>
+
+        <p class="modal-description">
+
+            Move tracked funds between any two
+            accounts in your Ledger.
+
+        </p>
+
+
+        <div class="field">
+
+            <label>
+                FROM
+            </label>
+
+            <select id="transferFrom"></select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                TO
+            </label>
+
+            <select id="transferTo"></select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                AMOUNT
+            </label>
+
+            <input
+                id="transferAmount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                placeholder="0.00"
+            >
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button"
+                onclick="closeModal('transferModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="transferFunds()"
+            >
+                Transfer
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ADD ACCOUNT MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="addAccountModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Add an account
+        </h2>
+
+        <p class="modal-description">
+
+            Create another tracked account with
+            a custom name, or instantly apply
+            for Savings.
+
+        </p>
+
+
+        <div class="field">
+
+            <label>
+                CUSTOM ACCOUNT NAME
+            </label>
+
+            <input
+                id="newAccountName"
+                type="text"
+                maxlength="40"
+                placeholder="e.g. Vacation Fund"
+            >
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button"
+                onclick="closeModal('addAccountModal')"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="addCustomAccount()"
+            >
+                Create account
+            </button>
+
+        </div>
+
+
+        <button
+            onclick="applyForSavings()"
+            style="
+                width:100%;
+                height:40px;
+                margin-top:9px;
+
+                border:1px solid rgba(92,117,255,.18);
+                border-radius:9px;
+
+                background:rgba(92,117,255,.08);
+                color:#9daaff;
+
+                font-size:10px;
+                font-weight:700;
+            "
+        >
+            Apply for Savings + Other
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SIGN OUT MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="signoutModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Before you sign out
+        </h2>
+
+        <p class="modal-description">
+
+            Your account is stored in your Ledger
+            token. Would you like to copy your
+            current token before signing out?
+
+        </p>
+
+
+        <textarea
+            class="token-display"
+            id="currentToken"
+            readonly
+        ></textarea>
+
+
+        <button
+            class="copy-token"
+            onclick="copyCurrentToken()"
+        >
+            Copy current token
+        </button>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button danger"
+                onclick="finishSignOut()"
+            >
+                Sign out
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="copyAndSignOut()"
+            >
+                Copy & sign out
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOKEN MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="tokenModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            Your current token
+        </h2>
+
+        <p class="modal-description">
+
+            This token contains your current
+            Ledger account information.
+
+        </p>
+
+
+        <textarea
+            class="token-display"
+            id="tokenViewer"
+            readonly
+        ></textarea>
+
+
+        <button
+            class="copy-token"
+            onclick="copyTokenViewer()"
+        >
+            Copy token
+        </button>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button primary"
+                onclick="closeModal('tokenModal')"
+            >
+                Done
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="toastContainer"></div>
+
+
+<script>
+
+/* =========================================================
+   LEDGER DATA
+========================================================= */
+
+let ledger = null;
+
+
+/* =========================================================
+   MONEY HELPERS
+========================================================= */
+
+function money(value) {
+
+    return "$" +
+        Number(value).toLocaleString(
+            "en-CA",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+function roundMoney(value) {
+
+    return Math.round(
+        (Number(value) + Number.EPSILON) * 100
+    ) / 100;
+
+}
+
+
+function makeID() {
+
+    return Date.now().toString(36) +
+        Math.random()
+            .toString(36)
+            .slice(2,9);
+
+}
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function formatDate(date) {
+
+    return new Date(date).toLocaleString(
+        "en-CA",
+        {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TOKEN
+========================================================= */
+
+function utf8ToBase64URL(text) {
+
+    const bytes =
+        new TextEncoder().encode(text);
+
+    let binary = "";
+
+    const chunk = 0x8000;
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += chunk
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(i,i + chunk)
+        );
+
+    }
+
+    return btoa(binary)
+        .replace(/\+/g,"-")
+        .replace(/\//g,"_")
+        .replace(/=+$/,"");
+
+}
+
+
+function base64URLToUTF8(base64) {
+
+    base64 =
+        base64
+            .replace(/-/g,"+")
+            .replace(/_/g,"/");
+
+    while (base64.length % 4) {
+        base64 += "=";
+    }
+
+    const binary = atob(base64);
+
+    const bytes =
+        Uint8Array.from(
+            binary,
+            c => c.charCodeAt(0)
+        );
+
+    return new TextDecoder()
+        .decode(bytes);
+
+}
+
+
+function generateToken() {
+
+    if (!ledger) {
+        return "";
+    }
+
+    const tokenData = {
+
+        version: 1,
+
+        name: ledger.name,
+
+        accounts: ledger.accounts,
+
+        transactions:
+            ledger.transactions
+                .slice(0,15)
+
+    };
+
+    return "LEDGER1." +
+        utf8ToBase64URL(
+            JSON.stringify(tokenData)
+        );
+
+}
+
+
+function decodeToken(token) {
+
+    token = token.trim();
+
+    if (!token.startsWith("LEDGER1.")) {
+        throw new Error("Invalid token.");
+    }
+
+    const encoded =
+        token.substring(8);
+
+    const json =
+        base64URLToUTF8(encoded);
+
+    const data =
+        JSON.parse(json);
+
+    if (
+        !data ||
+        typeof data.name !== "string" ||
+        !Array.isArray(data.accounts) ||
+        !Array.isArray(data.transactions)
+    ) {
+        throw new Error("Invalid token data.");
+    }
+
+    data.transactions =
+        data.transactions.slice(0,15);
+
+    data.accounts =
+        data.accounts.map(account => ({
+
+            id: account.id || makeID(),
+
+            name:
+                String(
+                    account.name || "Account"
+                ),
+
+            type:
+                String(
+                    account.type || "Other"
+                ),
+
+            balance:
+                roundMoney(
+                    Number(account.balance) || 0
+                )
+
+        }));
+
+    return data;
+
+}
+
+
+/* =========================================================
+   DEFAULT ACCOUNT
+========================================================= */
+
+function createDefaultLedger(name) {
+
+    return {
+
+        version: 1,
+
+        name: name.trim(),
+
+        accounts: [
+
+            {
+                id: makeID(),
+
+                name: "Chequing",
+
+                type: "Chequing",
+
+                balance: 10
+            }
+
+        ],
+
+        transactions: [
+
+            {
+                id: makeID(),
+
+                type: "in",
+
+                title: "Opening balance",
+
+                description:
+                    "New Ledger account",
+
+                amount: 10,
+
+                account: "Chequing",
+
+                date: Date.now()
+            }
+
+        ]
+
+    };
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function openLedger() {
+
+    const name =
+        document
+            .getElementById("loginName")
+            .value
+            .trim();
+
+    const token =
+        document
+            .getElementById("loginToken")
+            .value
+            .trim();
+
+
+    if (!name) {
+
+        showToast(
+            "Please enter your name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (token) {
+
+        try {
+
+            ledger =
+                decodeToken(token);
+
+            ledger.name = name;
+
+            showToast(
+                "Ledger loaded successfully.",
+                "success"
+            );
+
+        } catch {
+
+            showToast(
+                "That token is invalid or damaged.",
+                "error"
+            );
+
+            return;
+
+        }
+
+    } else {
+
+        ledger =
+            createDefaultLedger(name);
+
+        showToast(
+            "New Ledger created with $10.00.",
+            "success"
+        );
+
+    }
+
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+
+    document
+        .getElementById("app")
+        .style.display = "block";
+
+
+    renderDashboard();
+
+}
+
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+function calculateTotal() {
+
+    return roundMoney(
+
+        ledger.accounts.reduce(
+            (total,account) =>
+                total +
+                Number(account.balance),
+
+            0
+        )
+
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function renderDashboard() {
+
+    document
+        .getElementById("navUserName")
+        .textContent =
+        ledger.name;
+
+
+    document
+        .getElementById("welcomeText")
+        .textContent =
+        "Welcome back, " +
+        ledger.name +
+        ".";
+
+
+    document
+        .getElementById("totalBalance")
+        .textContent =
+        money(
+            calculateTotal()
+        );
+
+
+    document
+        .getElementById("accountCount")
+        .textContent =
+        ledger.accounts.length +
+        (
+            ledger.accounts.length === 1
+                ? " ACCOUNT"
+                : " ACCOUNTS"
+        );
+
+
+    renderMiniAccounts();
+
+    renderAccounts();
+
+    renderTransactions();
+
+    populateAccountSelects();
+
+}
+
+
+/* =========================================================
+   MINI ACCOUNTS
+========================================================= */
+
+function renderMiniAccounts() {
+
+    const container =
+        document.getElementById(
+            "miniAccounts"
+        );
+
+    container.innerHTML = "";
+
+
+    ledger.accounts.forEach(account => {
+
+        const initials =
+            account.name
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0,2)
+                .map(word => word[0])
+                .join("")
+                .toUpperCase();
+
+
+        container.innerHTML += `
+
+            <div class="mini-account">
+
+                <div class="account-circle">
+                    ${escapeHTML(initials)}
+                </div>
+
+                <div class="mini-account-info">
+
+                    <div class="mini-account-name">
+                        ${escapeHTML(account.name)}
+                    </div>
+
+                    <div class="mini-account-type">
+                        ${escapeHTML(account.type)}
+                    </div>
+
+                </div>
+
+                <div class="mini-account-balance">
+                    ${money(account.balance)}
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================================================
+   ACCOUNTS
+========================================================= */
+
+function renderAccounts() {
+
+    const container =
+        document.getElementById(
+            "accountsList"
+        );
+
+    container.innerHTML = "";
+
+
+    ledger.accounts.forEach(account => {
+
+        const initials =
+            account.name
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0,2)
+                .map(word => word[0])
+                .join("")
+                .toUpperCase();
+
+
+        container.innerHTML += `
+
+            <div class="account-row">
+
+                <div class="account-circle">
+                    ${escapeHTML(initials)}
+                </div>
+
+                <div class="account-row-info">
+
+                    <div class="account-row-name">
+                        ${escapeHTML(account.name)}
+                    </div>
+
+                    <div class="account-row-type">
+                        ${escapeHTML(account.type)}
+                    </div>
+
+                </div>
+
+                <div class="account-row-balance">
+                    ${money(account.balance)}
+                </div>
+
+                <div class="account-row-actions">
+
+                    <button
+                        class="tiny-button"
+                        onclick="openAccountTransfer('${account.id}')"
+                    >
+                        Move
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+function renderTransactions() {
+
+    const container =
+        document.getElementById(
+            "transactionsList"
+        );
+
+    container.innerHTML = "";
+
+
+    const transactions =
+        ledger.transactions.slice(0,15);
+
+
+    document
+        .getElementById("transactionCount")
+        .textContent =
+        transactions.length +
+        " / 15";
+
+
+    if (!transactions.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-transactions">
+                No transactions yet.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    transactions.forEach(transaction => {
+
+        let icon = "";
+
+
+        if (transaction.type === "in") {
+
+            icon = `
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M12 19V5"/>
+                    <path d="m6 11 6-6 6 6"/>
+                </svg>
+
+            `;
+
+        }
+
+        else if (transaction.type === "out") {
+
+            icon = `
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M12 5v14"/>
+                    <path d="m6 13 6 6 6-6"/>
+                </svg>
+
+            `;
+
+        }
+
+        else {
+
+            icon = `
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M7 7h13l-3-3"/>
+                    <path d="M17 17H4l3 3"/>
+                </svg>
+
+            `;
+
+        }
+
+
+        const amountClass =
+            transaction.type === "in"
+                ? "in"
+                : transaction.type === "out"
+                    ? "out"
+                    : "";
+
+
+        const sign =
+            transaction.type === "in"
+                ? "+"
+                : transaction.type === "out"
+                    ? "-"
+                    : "";
+
+
+        container.innerHTML += `
+
+            <div class="transaction">
+
+                <div class="transaction-icon ${amountClass}">
+                    ${icon}
+                </div>
+
+                <div class="transaction-info">
+
+                    <div class="transaction-title">
+                        ${escapeHTML(
+                            transaction.title
+                        )}
+                    </div>
+
+                    <div class="transaction-date">
+
+                        ${escapeHTML(
+                            transaction.account || ""
+                        )}
+
+                        ·
+
+                        ${formatDate(
+                            transaction.date
+                        )}
+
+                    </div>
+
+                </div>
+
+                <div class="transaction-amount ${amountClass}">
+                    ${sign}${money(transaction.amount)}
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================================================
+   TRANSACTION CREATOR
+========================================================= */
+
+function addTransaction(transaction) {
+
+    ledger.transactions.unshift({
+
+        id: makeID(),
+
+        ...transaction,
+
+        date: Date.now()
+
+    });
+
+
+    /*
+        HARD 15 TRANSACTION LIMIT.
+    */
+
+    ledger.transactions =
+        ledger.transactions.slice(0,15);
+
+}
+
+
+/* =========================================================
+   ACCOUNT SELECTS
+========================================================= */
+
+function populateAccountSelects() {
+
+    const selects = [
+
+        document.getElementById("sendAccount"),
+
+        document.getElementById("depositAccount"),
+
+        document.getElementById("transferFrom"),
+
+        document.getElementById("transferTo")
+
+    ];
+
+
+    selects.forEach(select => {
+
+        if (!select) return;
+
+
+        const previous =
+            select.value;
+
+
+        select.innerHTML = "";
+
+
+        ledger.accounts.forEach(account => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                account.id;
+
+            option.textContent =
+                account.name +
+                " — " +
+                money(account.balance);
+
+            select.appendChild(option);
+
+        });
+
+
+        if (
+            ledger.accounts.some(
+                account =>
+                    account.id === previous
+            )
+        ) {
+
+            select.value = previous;
+
+        }
+
+    });
+
+}
+
+
+function getAccount(id) {
+
+    return ledger.accounts.find(
+        account =>
+            account.id === id
+    );
+
+}
+
+
+/* =========================================================
+   SEND MONEY
+========================================================= */
+
+function sendMoney() {
+
+    const account =
+        getAccount(
+            document.getElementById(
+                "sendAccount"
+            ).value
+        );
+
+
+    const recipient =
+        document
+            .getElementById(
+                "sendRecipient"
+            )
+            .value
+            .trim();
+
+
+    const amount =
+        roundMoney(
+            parseFloat(
+                document.getElementById(
+                    "sendAmount"
+                ).value
+            )
+        );
+
+
+    if (!account) {
+
+        showToast(
+            "Please choose an account.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!recipient) {
+
+        showToast(
+            "Enter a recipient.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+
+        showToast(
+            "Enter a valid amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (amount > account.balance) {
+
+        showToast(
+            "That account does not have enough funds.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    account.balance =
+        roundMoney(
+            account.balance - amount
+        );
+
+
+    addTransaction({
+
+        type: "out",
+
+        title:
+            "Sent to " +
+            recipient,
+
+        description:
+            "Simulated transfer",
+
+        amount: amount,
+
+        account:
+            account.name
+
+    });
+
+
+    closeModal("sendModal");
+
+
+    document.getElementById(
+        "sendRecipient"
+    ).value = "";
+
+
+    document.getElementById(
+        "sendAmount"
+    ).value = "";
+
+
+    renderDashboard();
+
+
+    showToast(
+        money(amount) +
+        " sent to " +
+        recipient +
+        ".",
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   CHEQUE DEPOSIT
+========================================================= */
+
+function depositCheque() {
+
+    const account =
+        getAccount(
+            document.getElementById(
+                "depositAccount"
+            ).value
+        );
+
+
+    const amount =
+        roundMoney(
+            parseFloat(
+                document.getElementById(
+                    "depositAmount"
+                ).value
+            )
+        );
+
+
+    let description =
+        document
+            .getElementById(
+                "depositDescription"
+            )
+            .value
+            .trim();
+
+
+    if (!account) {
+
+        showToast(
+            "Please choose an account.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+
+        showToast(
+            "Enter a valid amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!description) {
+        description = "Cheque deposit";
+    }
+
+
+    account.balance =
+        roundMoney(
+            account.balance + amount
+        );
+
+
+    addTransaction({
+
+        type: "in",
+
+        title: description,
+
+        description:
+            "Cheque deposit",
+
+        amount: amount,
+
+        account:
+            account.name
+
+    });
+
+
+    closeModal("depositModal");
+
+
+    document.getElementById(
+        "depositAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "depositDescription"
+    ).value = "";
+
+
+    renderDashboard();
+
+
+    showToast(
+        money(amount) +
+        " deposited into " +
+        account.name +
+        ".",
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   TRANSFER
+========================================================= */
+
+function transferFunds() {
+
+    const from =
+        getAccount(
+            document.getElementById(
+                "transferFrom"
+            ).value
+        );
+
+
+    const to =
+        getAccount(
+            document.getElementById(
+                "transferTo"
+            ).value
+        );
+
+
+    const amount =
+        roundMoney(
+            parseFloat(
+                document.getElementById(
+                    "transferAmount"
+                ).value
+            )
+        );
+
+
+    if (!from || !to) {
+
+        showToast(
+            "Choose both accounts.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (from.id === to.id) {
+
+        showToast(
+            "Choose two different accounts.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+
+        showToast(
+            "Enter a valid amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (amount > from.balance) {
+
+        showToast(
+            "The source account does not have enough funds.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    from.balance =
+        roundMoney(
+            from.balance - amount
+        );
+
+
+    to.balance =
+        roundMoney(
+            to.balance + amount
+        );
+
+
+    addTransaction({
+
+        type: "transfer",
+
+        title:
+            "Transfer: " +
+            from.name +
+            " → " +
+            to.name,
+
+        description:
+            "Internal account transfer",
+
+        amount: amount,
+
+        account:
+            from.name
+
+    });
+
+
+    closeModal("transferModal");
+
+
+    document.getElementById(
+        "transferAmount"
+    ).value = "";
+
+
+    renderDashboard();
+
+
+    showToast(
+        money(amount) +
+        " transferred to " +
+        to.name +
+        ".",
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   ADD ACCOUNT
+========================================================= */
+
+function addCustomAccount() {
+
+    const input =
+        document.getElementById(
+            "newAccountName"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if (!name) {
+
+        showToast(
+            "Enter an account name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const duplicate =
+        ledger.accounts.some(
+            account =>
+                account.name.toLowerCase() ===
+                name.toLowerCase()
+        );
+
+
+    if (duplicate) {
+
+        showToast(
+            "An account with that name already exists.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    ledger.accounts.push({
+
+        id: makeID(),
+
+        name: name,
+
+        type: "Other",
+
+        balance: 0
+
+    });
+
+
+    input.value = "";
+
+
+    closeModal(
+        "addAccountModal"
+    );
+
+
+    renderDashboard();
+
+
+    showToast(
+        name +
+        " account created.",
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   SAVINGS
+========================================================= */
+
+function applyForSavings() {
+
+    const savingsExists =
+        ledger.accounts.some(
+            account =>
+                account.name.toLowerCase() ===
+                "savings"
+        );
+
+
+    if (savingsExists) {
+
+        showToast(
+            "You already have a Savings account.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    let otherName = "Other";
+
+    let counter = 2;
+
+
+    while (
+        ledger.accounts.some(
+            account =>
+                account.name.toLowerCase() ===
+                otherName.toLowerCase()
+        )
+    ) {
+
+        otherName =
+            "Other " + counter;
+
+        counter++;
+
+    }
+
+
+    ledger.accounts.push({
+
+        id: makeID(),
+
+        name: "Savings",
+
+        type: "Savings",
+
+        balance: 5
+
+    });
+
+
+    ledger.accounts.push({
+
+        id: makeID(),
+
+        name: otherName,
+
+        type: "Other",
+
+        balance: 0
+
+    });
+
+
+    addTransaction({
+
+        type: "in",
+
+        title:
+            "Savings account opened",
+
+        description:
+            "Opening balance",
+
+        amount: 5,
+
+        account:
+            "Savings"
+
+    });
+
+
+    closeModal(
+        "addAccountModal"
+    );
+
+
+    renderDashboard();
+
+
+    showToast(
+        "Savings opened with $5.00 + " +
+        otherName +
+        ".",
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   QUICK MOVE
+========================================================= */
+
+function openAccountTransfer(accountID) {
+
+    populateAccountSelects();
+
+
+    document.getElementById(
+        "transferFrom"
+    ).value = accountID;
+
+
+    openModal(
+        "transferModal"
+    );
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id) {
+
+    if (id === "signoutModal") {
+
+        document.getElementById(
+            "currentToken"
+        ).value =
+            getCurrentToken();
+
+    }
+
+
+    if (id === "tokenModal") {
+
+        document.getElementById(
+            "tokenViewer"
+        ).value =
+            getCurrentToken();
+
+    }
+
+
+    if (id === "sendModal") {
+        populateAccountSelects();
+    }
+
+
+    if (id === "depositModal") {
+        populateAccountSelects();
+    }
+
+
+    if (id === "transferModal") {
+        populateAccountSelects();
+    }
+
+
+    document.getElementById(id)
+        .style.display = "flex";
+
+}
+
+
+function closeModal(id) {
+
+    document.getElementById(id)
+        .style.display = "none";
+
+}
+
+
+/* =========================================================
+   OUTSIDE CLICK
+========================================================= */
+
+document
+    .querySelectorAll(".modal-overlay")
+    .forEach(overlay => {
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === overlay
+                ) {
+
+                    overlay.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+
+            document
+                .querySelectorAll(
+                    ".modal-overlay"
+                )
+                .forEach(modal => {
+
+                    modal.style.display =
+                        "none";
+
+                });
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+function copyText(text) {
+
+    if (
+        navigator.clipboard &&
+        window.isSecureContext
+    ) {
+
+        return navigator.clipboard
+            .writeText(text);
+
+    }
+
+
+    const textarea =
+        document.createElement(
+            "textarea"
+        );
+
+
+    textarea.value = text;
+
+    textarea.style.position =
+        "fixed";
+
+    textarea.style.left =
+        "-9999px";
+
+
+    document.body.appendChild(
+        textarea
+    );
+
+
+    textarea.select();
+
+    document.execCommand(
+        "copy"
+    );
+
+
+    document.body.removeChild(
+        textarea
+    );
+
+
+    return Promise.resolve();
+
+}
+
+
+function copyCurrentToken() {
+
+    copyText(
+        getCurrentToken()
+    )
+    .then(() => {
+
+        showToast(
+            "Current token copied.",
+            "success"
+        );
+
+    })
+    .catch(() => {
+
+        showToast(
+            "Could not copy automatically.",
+            "error"
+        );
+
+    });
+
+}
+
+
+function copyTokenViewer() {
+
+    copyText(
+        getCurrentToken()
+    )
+    .then(() => {
+
+        showToast(
+            "Current token copied.",
+            "success"
+        );
+
+    })
+    .catch(() => {
+
+        showToast(
+            "Could not copy automatically.",
+            "error"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+function signOut() {
+
+    /*
+        Always display the current token first.
+    */
+
+    openModal(
+        "signoutModal"
+    );
+
+}
+
+
+function finishSignOut() {
+
+    ledger = null;
+
+
+    closeModal(
+        "signoutModal"
+    );
+
+
+    document.getElementById(
+        "app"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "flex";
+
+
+    document.getElementById(
+        "loginName"
+    ).value = "";
+
+
+    document.getElementById(
+        "loginToken"
+    ).value = "";
+
+
+    showToast(
+        "Signed out.",
+        "success"
+    );
+
+}
+
+
+function copyAndSignOut() {
+
+    copyText(
+        getCurrentToken()
+    )
+    .then(() => {
+
+        showToast(
+            "Token copied. Signing out...",
+            "success"
+        );
+
+
+        setTimeout(
+            finishSignOut,
+            450
+        );
+
+    })
+    .catch(() => {
+
+        showToast(
+            "Copy failed. Your token is still visible above.",
+            "error"
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   TOKEN
+========================================================= */
+
+function getCurrentToken() {
+
+    /*
+        IMPORTANT:
+
+        The token is regenerated every single time.
+
+        It therefore always represents:
+        - latest account balances
+        - latest accounts
+        - latest 15 transactions
+    */
+
+    return generateToken();
+
+}
+
+
+function showToken() {
+
+    openModal(
+        "tokenModal"
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const container =
+        document.getElementById(
+            "toastContainer"
+        );
+
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+
+    toast.className =
+        "toast " + type;
+
+
+    const icon =
+        type === "success"
+
+            ? `
+
+                <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                >
+                    <path d="m5 12 4 4L19 6"/>
+                </svg>
+
+            `
+
+            : `
+
+                <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                >
+                    <path d="M12 8v4"/>
+                    <path d="M12 16h.01"/>
+                </svg>
+
+            `;
+
+
+    toast.innerHTML = `
+
+        <div class="toast-icon">
+            ${icon}
+        </div>
+
+        <div class="toast-text">
+            ${escapeHTML(message)}
+        </div>
+
+    `;
+
+
+    container.appendChild(
+        toast
+    );
+
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+
+        toast.style.transform =
+            "translateY(8px)";
+
+        toast.style.transition =
+            "all .25s ease";
+
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        },250);
+
+    },3200);
+
+}
+
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+document.getElementById(
+    "app"
+).style.display = "none";
+
+</script>
+
+</body>
+</html>
