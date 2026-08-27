@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#08090c">
 <link rel="icon" type="image/png" href="logo.png">
 
-<title>Ledger — Account</title>
+<title>Ledgered — Account</title>
 
 <style>
 
@@ -1568,7 +1568,7 @@ nav {
 
             </div>
 
-            Ledger
+            Ledgered
 
         </div>
 
@@ -1639,7 +1639,7 @@ nav {
 
         <p class="login-note">
 
-            Ledger is a personal tracking tool.
+            Ledgered is a personal tracking tool.
             It does not connect to banks, move real
             money, or process payments.
 
@@ -2041,8 +2041,7 @@ nav {
 
             Record a cheque deposit by choosing
             an account and entering the amount.
-            This instantly adds the amount to
-            your tracked balance.
+            We will clear it from there.
 
         </p>
 
@@ -2278,7 +2277,7 @@ nav {
                 font-weight:700;
             "
         >
-            Apply for Savings + Other
+            Apply for Savings+
         </button>
 
     </div>
@@ -2366,7 +2365,7 @@ nav {
         <p class="modal-description">
 
             This token contains your current
-            Ledger account information.
+            Ledgered account information.
 
         </p>
 
@@ -2659,7 +2658,7 @@ function createDefaultLedger(name) {
                 description:
                     "New Ledger account",
 
-                amount: 10,
+                amount: 15,
 
                 account: "Chequing",
 
@@ -2735,7 +2734,7 @@ function openLedger() {
             createDefaultLedger(name);
 
         showToast(
-            "New Ledger created with $10.00.",
+            "New Ledger created! Welcome!.",
             "success"
         );
 
@@ -3140,7 +3139,7 @@ function addTransaction(transaction) {
     */
 
     ledger.transactions =
-        ledger.transactions.slice(0,15);
+        ledger.transactions.slice(0,10);
 
 }
 
@@ -3781,7 +3780,7 @@ function applyForSavings() {
 
 
     showToast(
-        "Savings opened with $5.00 + " +
+        "Savings+ opened, here's $5.00 on us to get your savings journey started." +
         otherName +
         ".",
         "success"
@@ -4124,7 +4123,7 @@ function getCurrentToken() {
         It therefore always represents:
         - latest account balances
         - latest accounts
-        - latest 15 transactions
+        - latest 10 transactions
     */
 
     return generateToken();
