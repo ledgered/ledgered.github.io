@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>MAISON — Private marketplace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23050505%22/><text x=%2232%22 y=%2242%22 text-anchor=%22middle%22 font-family=%22serif%22 font-size=%2236%22 fill=%22%23c8a45d%22>M</text></svg>">
+<style>
+:root{
+  --ivory:#f8f6f1;--paper:#fff;--ink:#171717;--muted:#706d68;--line:#dedbd4;
+  --red:#7d1424;--red-dark:#5d0d19;--soft:#f1eee8;--success:#2f6945;--danger:#8c2637;
+  --serif:Georgia,"Times New Roman",serif;--sans:Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box}html{background:var(--ivory);color:var(--ink);font-family:var(--sans);scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.hidden{display:none!important}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.topbar{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;grid-template-areas:"nav brand actions";align-items:center;gap:24px;min-height:92px;padding:18px 34px;background:rgba(248,246,241,.97);border-bottom:1px solid var(--line)}
+.brand{grid-area:brand;font:400 28px/1 var(--serif);letter-spacing:.28em;text-indent:.28em;white-space:nowrap}.brand b{font-weight:400;color:inherit}.nav{grid-area:nav;display:flex;gap:22px;align-items:center}.nav button,.ghost{border:0;background:transparent;color:#2a2927;padding:8px 0;border-radius:0;font-size:11px;letter-spacing:.14em;text-transform:uppercase;border-bottom:1px solid transparent}.nav button.active,.nav button:hover,.ghost:hover{border-bottom-color:var(--ink)}
+.top-actions{grid-area:actions;justify-self:end;display:flex;gap:18px;align-items:center}.iconbtn,.primary{border:0;background:transparent;color:var(--ink);padding:9px 0;border-radius:0;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid var(--ink)}.primary{background:var(--red);border:1px solid var(--red);color:#fff;padding:13px 20px;font-weight:700;letter-spacing:.1em}.primary:hover{background:var(--red-dark);border-color:var(--red-dark)}.iconbtn:hover{color:var(--red);border-bottom-color:var(--red)}.cart-count{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--red);color:#fff;font-size:10px;font-weight:700;margin-left:6px}
+.hero{max-width:1600px;margin:0 auto;padding:0 34px 38px;display:grid;grid-template-columns:1.18fr .82fr;gap:0;border-bottom:1px solid var(--line)}.hero-copy{padding:92px 7vw 84px 0;align-self:center}.eyebrow{letter-spacing:.19em;text-transform:uppercase;color:var(--red);font-size:10px;font-weight:700}.hero h1{font:400 clamp(58px,7.6vw,122px)/.9 var(--serif);margin:20px 0 26px;letter-spacing:-.055em}.hero h1 em{color:var(--red);font-style:italic;font-weight:400}.hero p{max-width:680px;color:#5f5b56;line-height:1.8;font-size:14px;margin-bottom:30px}
+.hero-card{background:var(--red);color:#fff;min-height:540px;padding:52px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}.hero-card:before{content:"M";position:absolute;right:-20px;top:-56px;font:400 360px/.9 var(--serif);color:rgba(255,255,255,.065)}.hero-card .eyebrow{color:#f0dfe2}.hero-card .big{font:400 clamp(40px,4vw,67px)/1.02 var(--serif);max-width:520px;position:relative;z-index:1}.hero-card .deal{border-top:1px solid rgba(255,255,255,.35);padding-top:22px;display:flex;justify-content:space-between;gap:20px;position:relative;z-index:1}.deal strong{display:block;font:400 25px var(--serif)}.deal small{color:#efdfe2;font-size:10px;text-transform:uppercase;letter-spacing:.12em}
+.marquee{border-bottom:1px solid var(--line);padding:14px 0;overflow:hidden;color:#56524d;font-size:10px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;background:#fff}.marquee span{display:inline-block;padding-left:100%;animation:mar 45s linear infinite}@keyframes mar{to{transform:translateX(-100%)}}
+.shell{max-width:1600px;margin:0 auto;padding:42px 34px 96px}.toolbar{display:grid;grid-template-columns:minmax(260px,1fr) auto;gap:22px;margin-bottom:36px;align-items:end}.search{display:flex;align-items:center;background:transparent;border-bottom:1px solid #9d9992;padding:0 2px}.search input{width:100%;background:none;border:0;outline:0;color:var(--ink);padding:13px 8px;font-size:13px}.chips{display:flex;gap:18px;overflow:auto;padding-bottom:3px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{flex:0 0 auto;border:0;border-bottom:1px solid transparent;background:transparent;color:#5f5b56;padding:10px 0;font-size:10px;letter-spacing:.13em;text-transform:uppercase}.chip.active{color:var(--red);border-bottom-color:var(--red)}
+.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:36px 0 22px}.sectionhead h2{font:400 43px var(--serif);margin:0}.sectionhead small{color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.card{background:var(--paper);overflow:hidden;transition:background .18s ease;min-width:0;content-visibility:auto;contain-intrinsic-size:540px}.card:hover{background:#fbfaf7}.art{height:285px;position:relative;display:flex;align-items:flex-end;padding:20px;background:var(--soft);overflow:hidden;border-bottom:1px solid #ebe8e2}.art:before{content:"";position:absolute;width:210px;height:210px;border-radius:50%;background:rgba(255,255,255,.62);left:50%;top:50%;transform:translate(-50%,-50%)}.art .glyph{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:400 128px/1 var(--serif);color:rgba(125,20,36,.13);z-index:1}.badge{position:absolute;left:16px;top:16px;background:var(--paper);border:1px solid #d8d4cc;padding:6px 8px;border-radius:0;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;z-index:3}.badge.sale{color:var(--red)}.badge.stock{left:auto;right:16px;color:#484540}.art h3{display:none}.meta{padding:18px 18px 20px;min-height:244px;display:flex;flex-direction:column}.brandname{font-size:9px;letter-spacing:.17em;color:#6d6963;text-transform:uppercase}.desc{color:#6c6862;font-size:12px;min-height:54px;line-height:1.55;margin:9px 0 12px}.meta:before{content:attr(data-title);font:400 23px/1.15 var(--serif);margin:8px 0 2px;color:var(--ink)}.price-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:auto}.price{font-size:13px;font-weight:700}.was{text-decoration:line-through;color:#94908a;font-size:11px}.save{color:var(--red);font-size:10px}.card-actions{display:flex;gap:16px;margin-top:18px}.card-actions button{flex:1;border:0;border-bottom:1px solid #57534e;background:transparent;color:var(--ink);padding:9px 0;font-size:10px;letter-spacing:.12em;text-transform:uppercase}.card-actions .buy{background:var(--red);color:#fff;border:1px solid var(--red);font-weight:700;padding:10px}.card-actions .buy:hover{background:var(--red-dark)}.sold{opacity:.52}.sold .buy{pointer-events:none}
+.view{display:none}.view.active{display:block}.panel{background:var(--paper);border:1px solid var(--line);overflow:hidden}.panelhead{padding:24px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.panelhead h2{font:400 34px var(--serif);margin:0}.panelhead small{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}.panelbody{padding:26px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:24px}.stat{background:#fff;padding:22px}.stat small{color:var(--muted);display:block;font-size:9px;text-transform:uppercase;letter-spacing:.12em}.stat strong{font:400 25px var(--serif);margin-top:8px;display:block}.order{display:grid;grid-template-columns:1fr auto;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}.order:last-child{border-bottom:0}.order h3{margin:0 0 6px;font:400 19px var(--serif)}.order p{margin:3px 0;color:#77716b;font-size:11px}.status{font-size:9px;border:1px solid #b9b4ac;padding:7px 9px;height:max-content;color:var(--red);letter-spacing:.08em;text-transform:uppercase}.collection{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line)}.owned{background:#fff;padding:14px}.owned .mini{height:105px;margin-bottom:12px;background:var(--soft);display:grid;place-items:center;font:42px var(--serif);color:rgba(125,20,36,.42)}.owned small{color:var(--muted);font-size:10px}
+.modalback{position:fixed;inset:0;z-index:60;background:rgba(18,15,14,.62);display:none;align-items:center;justify-content:center;padding:18px}.modalback.open{display:flex}.modal{width:min(650px,100%);max-height:92vh;overflow:auto;background:#fff;border:1px solid #cfcac2;box-shadow:0 22px 70px rgba(0,0,0,.2)}.modalhead{padding:24px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.modalhead h2{font:400 31px var(--serif);margin:0}.x{width:34px;height:34px;border:0;background:transparent;color:#514d48;font-size:24px}.modalbody{padding:26px}.field{margin:16px 0}.field label{display:flex;justify-content:space-between;font-size:9px;color:#6b6761;margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em}.field input,.field textarea,.field select{width:100%;border:1px solid #cfcac2;background:#fff;color:#161616;border-radius:0;padding:13px;outline:0}.field textarea{min-height:110px;resize:vertical}.notice{background:#f5f1eb;border-left:3px solid var(--red);color:#615c56;padding:13px 15px;font-size:11px;line-height:1.6}.checkout-total{display:flex;justify-content:space-between;align-items:end;border-top:1px solid var(--line);margin-top:18px;padding-top:18px}.checkout-total strong{font:400 29px var(--serif)}.full{width:100%;padding:13px}.keybox{word-break:break-all;background:#f5f3ef;border:1px solid #d8d3cb;padding:12px;max-height:145px;overflow:auto;color:#5b514a;font:10px ui-monospace,SFMono-Regular,Menlo,monospace}.result{margin-top:14px}.toast{position:fixed;right:20px;bottom:20px;z-index:80;background:#fff;border:1px solid #bfb9b0;color:#222;padding:12px 15px;opacity:0;transform:translateY(12px);transition:.18s;pointer-events:none;box-shadow:0 10px 35px rgba(0,0,0,.12);font-size:11px}.toast.show{opacity:1;transform:none}.empty{text-align:center;padding:55px 20px;color:#777}
+.lite-note{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#706d68;border:1px solid #cfcac2;padding:7px 9px;white-space:nowrap}.product-media{position:absolute;left:50%;top:50%;width:64%;height:64%;transform:translate(-50%,-50%);z-index:2;display:grid;place-items:center;pointer-events:none}.product-media svg{width:100%;height:100%;stroke:var(--red);fill:none;stroke-width:1.5;vector-effect:non-scaling-stroke}.product-media .fill{fill:rgba(125,20,36,.08);stroke:var(--red)}.product-media img{width:100%;height:100%;object-fit:contain;display:block}.product-media .real-image{opacity:0;transition:opacity .25s}.product-media .real-image.loaded{opacity:1}.image-credit{display:none}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.collection{grid-template-columns:repeat(4,1fr)}.hero{grid-template-columns:1fr}.hero-copy{padding:70px 0}.hero-card{min-height:390px}.stats{grid-template-columns:repeat(2,1fr)}.topbar{grid-template-columns:auto 1fr auto;grid-template-areas:"brand nav actions"}.brand{justify-self:start}.nav{justify-self:center}}
+@media(max-width:760px){.topbar{position:relative;grid-template-columns:1fr auto;grid-template-areas:"brand actions" "nav nav";min-height:0;padding:15px 14px 11px;gap:13px}.brand{font-size:21px}.nav{width:100%;justify-self:start;overflow:auto;gap:20px;padding-top:8px}.top-actions{gap:11px}.account-label{display:none}.lite-note{display:none}.hero{padding:0 14px 26px}.hero-copy{padding:52px 0 48px}.hero h1{font-size:58px}.hero-card{min-height:330px;padding:30px}.hero-card .big{font-size:42px}.shell{padding:28px 14px 70px}.toolbar{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.art{height:205px}.meta{padding:14px;min-height:236px}.meta:before{font-size:19px}.desc{font-size:11px}.collection{grid-template-columns:repeat(2,1fr)}.sectionhead h2{font-size:35px}.panelbody{padding:16px}.modal{max-height:95vh}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.art{height:275px}.meta{min-height:215px}.hero h1{font-size:50px}.hero-card .deal{flex-direction:column}.stats{grid-template-columns:1fr}.top-actions .iconbtn{font-size:9px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* v3 — black / white with rare gold accents */
+:root{--gold:#c8a45d;--gold-soft:#e4cf9e;--black:#050505;--black2:#0a0a0a;--black3:#111;--white:#f4f3ef;--white2:#d8d7d2;--red:var(--gold);--red-dark:#a58240;--ivory:var(--black);--paper:var(--black2);--ink:var(--white);--muted:#8c8b87;--line:#262626;--soft:#101010}
+html,body{background:var(--black);color:var(--white)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline-color:var(--gold)}
+.topbar{background:rgba(5,5,5,.96);border-color:#242424}.brand{color:#fff}.nav button,.ghost,.iconbtn{color:#d8d7d2}.nav button.active,.nav button:hover,.ghost:hover{border-bottom-color:#fff;color:#fff}.iconbtn:hover{color:#fff;border-bottom-color:var(--gold)}
+.primary{background:#f4f3ef;border-color:#f4f3ef;color:#050505}.primary:hover{background:#fff;border-color:#fff}.cart-count{background:var(--gold);color:#090909}
+.hero{border-color:#242424}.hero p{color:#aaa9a5}.eyebrow{color:var(--gold)}.hero h1 em{color:#fff}.hero-card{background:#f0efea;color:#090909;border-left:1px solid #252525}.hero-card:before{color:rgba(0,0,0,.035)}.hero-card .eyebrow{color:#866b35}.hero-card .deal{border-color:rgba(0,0,0,.2)}.hero-card .deal small{color:#6f6a60}
+.marquee{background:#070707;border-color:#222;color:#777}.shell{background:#050505}.search{border-color:#555}.search input{color:#f4f3ef}.chip{color:#92918d}.chip.active{color:var(--gold);border-bottom-color:var(--gold)}
+.grid,.stats,.collection{background:#252525;border-color:#252525}.card,.stat,.owned{background:#0a0a0a}.card:hover{background:#0e0e0e}.art{background:#101010;border-color:#232323}.art:before{background:rgba(255,255,255,.025)}.art .glyph{color:rgba(255,255,255,.035)}.badge{background:#080808;border-color:#3a3a3a;color:#d8d7d2}.badge.sale{color:var(--gold);border-color:#66552f}.badge.stock{color:#a8a7a2}.meta:before{color:#f4f3ef}.brandname,.desc{color:#92918d}.price{color:#f3f2ef}.was{color:#666}.save{color:var(--gold)}.card-actions button{border-color:#666;color:#e7e6e1}.card-actions .buy{background:#f2f1ec;color:#080808;border-color:#f2f1ec}.card-actions .buy:hover{background:#fff}
+.panel{background:#090909;border-color:#272727}.panelhead{border-color:#242424}.stat strong,.panelhead h2,.order h3{color:#f3f2ee}.order{border-color:#242424}.order p{color:#8d8c88}.status{border-color:#4b4b48;color:#d9d8d2}.status.gold{color:var(--gold);border-color:#66552f}.owned .mini{background:#111;color:var(--gold)}
+.modalback{background:rgba(0,0,0,.82)}.modal{background:#080808;border-color:#303030;box-shadow:0 30px 90px rgba(0,0,0,.7)}.modalhead{border-color:#272727}.modalhead h2{color:#f3f2ef}.x{color:#aaa}.field label{color:#898884}.field input,.field textarea,.field select{background:#0d0d0d;border-color:#3a3a3a;color:#f4f3ef}.notice{background:#101010;border-left-color:var(--gold);color:#aaa}.checkout-total{border-color:#2a2a2a}.keybox{background:#0e0e0e;border-color:#303030;color:#a9a8a3}.toast{background:#0e0e0e;border-color:#444;color:#f4f3ef}.lite-note{border-color:#353535;color:#73726e}.product-media svg{stroke:#d2d1cc}.product-media .fill{fill:rgba(255,255,255,.025);stroke:#d2d1cc}
+.rental-pill{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--gold);border:1px solid #5b4c2b;padding:5px 7px;margin-left:4px}.unit-price{font-size:10px;color:#8c8b87;font-weight:400}
+.order-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap}.trackbtn{border:0;border-bottom:1px solid #666;background:none;color:#eee;padding:7px 0;font-size:9px;letter-spacing:.11em;text-transform:uppercase}.trackbtn:hover{color:var(--gold);border-color:var(--gold)}
+.tracking-modal{width:min(880px,100%)}.tracking-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:1px;background:#282828;border:1px solid #282828}.gps-map{height:390px;position:relative;overflow:hidden;background:#0c0c0c;isolation:isolate}.gps-map:before,.gps-map:after{content:"";position:absolute;inset:-20%;background-image:linear-gradient(28deg,transparent 46%,#1d1d1d 47%,#1d1d1d 49%,transparent 50%),linear-gradient(-21deg,transparent 47%,#171717 48%,#171717 50%,transparent 51%);background-size:125px 85px,145px 105px;z-index:-2}.gps-map:after{transform:rotate(7deg);opacity:.7;background-size:210px 120px,170px 95px}.gps-map svg{position:absolute;inset:0;width:100%;height:100%}.gps-label{position:absolute;z-index:4;background:#080808;border:1px solid #383838;padding:7px 9px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#d8d7d2}.gps-label.start{left:18px;bottom:18px}.gps-label.end{right:18px;top:18px;color:var(--gold);border-color:#5d4d2d}.gps-live{position:absolute;left:18px;top:18px;z-index:5;display:flex;align-items:center;gap:7px;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#eee}.gps-live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px rgba(200,164,93,.10)}
+.track-side{background:#090909;padding:24px}.track-kicker{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold)}.track-side h3{font:400 31px/1.08 var(--serif);margin:9px 0 18px}.track-metric{padding:13px 0;border-top:1px solid #282828}.track-metric small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.11em;margin-bottom:5px}.track-metric strong{font-size:13px;color:#e9e8e3}.track-progress{height:2px;background:#252525;margin:15px 0 5px}.track-progress i{display:block;height:100%;background:var(--gold);width:0}.timeline{margin-top:18px}.timeline-row{display:grid;grid-template-columns:10px 1fr;gap:11px;padding:0 0 15px}.timeline-row i{width:7px;height:7px;border:1px solid #555;border-radius:50%;margin-top:4px}.timeline-row.done i{background:#e8e7e2;border-color:#e8e7e2}.timeline-row.active i{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 4px rgba(200,164,93,.08)}.timeline-row span{font-size:10px;color:#777}.timeline-row.done span,.timeline-row.active span{color:#ddd}
+.info-card{background:#0d0d0d;border:1px solid #2c2c2c;padding:20px}.info-card h3{font:400 29px var(--serif);margin:5px 0 16px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#272727}.info-grid>div{background:#0a0a0a;padding:16px}.info-grid small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}.info-grid strong{font-size:12px}.countdown-big{font:400 clamp(30px,5vw,48px) var(--serif);margin:15px 0;color:#f4f3ef}.get-out{color:var(--gold)!important}
+@media(max-width:760px){.tracking-grid{grid-template-columns:1fr}.gps-map{height:300px}.track-side{padding:18px}.info-grid{grid-template-columns:1fr}.hero-card{border-left:0}.order-actions{justify-content:flex-start}.order{grid-template-columns:1fr}}
+
+
+/* V4 — retail realism pass */
+:root{--gold:#b49352;--white:#f5f4ef;--black:#050505;--line:#252525}
+body{background:#050505;color:#f5f4ef;font-family:Arial,Helvetica,sans-serif}
+.topbar{min-height:72px;padding:14px 28px;background:rgba(5,5,5,.985);border-bottom:1px solid #1d1d1d;backdrop-filter:blur(12px)}
+.brand{font-size:23px;letter-spacing:.34em;text-indent:.34em}.nav{gap:28px}.nav button,.iconbtn{font-size:10px;letter-spacing:.16em}.nav button.active{border-bottom-color:var(--gold)}
+.hero{max-width:1440px;padding:0 28px 52px;border:0;grid-template-columns:1.08fr .92fr;gap:22px}.hero-copy{min-height:560px;padding:86px 7vw 72px 2vw;display:flex;flex-direction:column;justify-content:center}.hero h1{font-size:clamp(62px,7vw,108px);letter-spacing:-.05em;max-width:720px}.hero p{font-size:13px;line-height:1.85;max-width:590px;color:#9c9b97}.hero .primary{width:max-content}.hero-card{min-height:560px;background:#efeee9;border:0;padding:50px;color:#090909}.hero-card:before{display:none}.hero-card .big{font-size:clamp(38px,4.2vw,64px);letter-spacing:-.025em}.hero-card .deal{border-color:#cfcdc5}.hero-card .eyebrow{color:#806731}.marquee{display:none!important}
+.shell{max-width:1440px;padding:28px 28px 100px}.toolbar{grid-template-columns:minmax(260px,430px) 1fr;gap:42px;margin-bottom:48px}.chips{justify-content:flex-end}.chip{color:#888782;padding:12px 0}.chip.active{color:#fff;border-color:var(--gold)}
+.sectionhead{padding-bottom:18px;border-bottom:1px solid #222;margin:20px 0 28px}.sectionhead h2{font-size:36px;margin-top:7px}.sectionhead small{color:#73726e}.eyebrow{font-size:9px;letter-spacing:.2em;color:var(--gold)}
+.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:38px 20px;background:transparent;border:0}.card{background:transparent;overflow:visible;content-visibility:auto;contain-intrinsic-size:500px}.card:hover{background:transparent}.product-open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left}.art{height:330px;padding:0;background:#efeee9;border:0;transition:background .25s ease}.card:hover .art{background:#f6f5f1}.art:before,.art .glyph{display:none}.product-media{width:59%;height:59%}.product-media svg{stroke:#111;stroke-width:1.25}.product-media .fill{fill:rgba(0,0,0,.035);stroke:#111}.badge{top:14px;left:14px;border:0;background:#090909;color:#fff;padding:7px 9px;font-weight:400}.badge.sale{color:#fff}.badge.stock{left:auto;right:14px;color:#282828;background:rgba(245,244,239,.92)}
+.meta{padding:15px 0 0;min-height:0;display:block}.meta:before{font:400 18px/1.25 Georgia,'Times New Roman',serif;margin:5px 0 6px;display:block}.brandname{font-size:8px;letter-spacing:.18em;color:#8e8d89}.product-kind{font-size:10px;color:#686762;margin:3px 0 10px;text-transform:uppercase;letter-spacing:.08em}.desc{display:none}.price-row{margin:0;gap:8px}.price{font-size:12px;font-weight:400;color:#eeede8}.was{font-size:10px}.save,.rental-pill{display:none}.unit-price{font-size:10px;color:#74736f}.card-actions{gap:18px;margin-top:12px}.card-actions button{flex:0 0 auto;border:0;border-bottom:1px solid #54534f;padding:5px 0;color:#aaa9a4;font-size:9px}.card-actions .buy{margin-left:auto;background:transparent;color:#f0efea;border:0;border-bottom:1px solid #b49352;padding:5px 0;font-weight:400}.card-actions .buy:hover{background:transparent;color:#fff;border-color:#fff}.sold{opacity:.48}
+.orders-header{display:flex;justify-content:space-between;gap:24px;align-items:end;padding:36px 0 28px;border-bottom:1px solid #252525}.orders-header h2{font:400 42px/1.05 Georgia,'Times New Roman',serif;margin:8px 0}.orders-header p{margin:0;color:#858480;font-size:12px}.orders-header small{color:#777671;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.order-list{max-width:1100px;margin:0 auto}.order-card{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:25px;align-items:center;padding:28px 0;border-bottom:1px solid #242424}.order-thumb{height:124px;background:#efeee9;position:relative;overflow:hidden}.order-thumb .product-media{width:62%;height:62%}.order-thumb .product-media svg{stroke:#111}.order-thumb .product-media .fill{stroke:#111;fill:rgba(0,0,0,.035)}.order-copy h3{font:400 21px/1.2 Georgia,'Times New Roman',serif;margin:6px 0 8px}.order-copy p{font-size:10px;color:#858480;margin:4px 0}.order-extra{color:#b49352!important}.order-right{text-align:right;display:flex;min-width:175px;flex-direction:column;align-items:flex-end;gap:10px}.order-right>strong{font-size:12px;font-weight:400}.status{padding:0;border:0;color:#aaa9a4}.status.gold{color:#b49352}.trackbtn{font-size:9px;border-color:#555}.order-empty{text-align:center;padding:100px 20px}.order-empty h3{font:400 34px Georgia,'Times New Roman',serif;margin:0 0 8px}.order-empty p{color:#777;margin-bottom:24px}
+.panel,.stats{border:0;background:transparent}.stats{display:none}.panelhead{padding-left:0;padding-right:0}.panelbody{padding-left:0;padding-right:0}
+.modalback{background:rgba(0,0,0,.76);backdrop-filter:blur(4px)}.modal:not(.tracking-modal){background:#f3f2ed;color:#111;border:0;box-shadow:0 35px 120px rgba(0,0,0,.55)}.modal:not(.tracking-modal) .modalhead{border-color:#d5d2ca}.modal:not(.tracking-modal) .modalhead h2{color:#111}.modal:not(.tracking-modal) .x{color:#333}.modal:not(.tracking-modal) .brandname{color:#6b6860}.modal:not(.tracking-modal) .field label{color:#6e6a62}.modal:not(.tracking-modal) .field input,.modal:not(.tracking-modal) .field textarea,.modal:not(.tracking-modal) .field select{background:#fff;border-color:#cbc7bd;color:#111}.modal:not(.tracking-modal) .notice{background:#e9e7e0;color:#555;border-left:2px solid var(--gold)}.modal:not(.tracking-modal) .keybox{background:#e9e7e0;border-color:#d2cec4;color:#4b4943}.modal:not(.tracking-modal) .order{border-color:#d8d4cb}.modal:not(.tracking-modal) .order h3{color:#111}.modal:not(.tracking-modal) .order p{color:#6c6962}.modal:not(.tracking-modal) .checkout-total{border-color:#d7d3ca}.modal:not(.tracking-modal) .iconbtn{color:#111;border-color:#777}.modal:not(.tracking-modal) .primary{background:#080808;color:#fff;border-color:#080808}.modal:not(.tracking-modal) #detailSale{color:#806731!important}
+.tracking-modal{background:#080808;color:#f3f2ed}.tracking-modal .modalhead{background:#080808}.tracking-modal .modalhead h2{color:#f3f2ed}.toast{border:0;background:#f2f1ec;color:#111;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(3,1fr)}.hero-copy{min-height:470px}.hero-card{min-height:470px}.order-card{grid-template-columns:125px 1fr auto}}
+@media(max-width:760px){.topbar{position:sticky;padding:14px;grid-template-areas:'brand actions' 'nav nav'}.nav{padding-top:4px}.hero{padding:0 14px 28px;display:block}.hero-copy{min-height:auto;padding:60px 0}.hero h1{font-size:62px}.hero-card{min-height:360px;padding:32px}.shell{padding:24px 14px 70px}.toolbar{display:block}.chips{justify-content:flex-start;margin-top:20px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 10px}.art{height:220px}.meta:before{font-size:16px}.card-actions{gap:10px}.card-actions button{font-size:8px}.order-card{grid-template-columns:88px 1fr;gap:14px}.order-thumb{height:88px}.order-right{grid-column:2;text-align:left;align-items:flex-start;min-width:0;gap:7px}.orders-header{align-items:flex-start;flex-direction:column}.orders-header h2{font-size:35px}.modal:not(.tracking-modal){max-height:96vh}.tracking-grid{grid-template-columns:1fr}}
+
+</style>
+
+<style>
+/* v5 — photographic catalog / low-data storefront */
+.hero-card{background-image:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.66)),url("https://images.pexels.com/photos/31737861/pexels-photo-31737861.jpeg?auto=compress&cs=tinysrgb&w=480&h=600&fit=crop&dpr=1");background-size:cover;background-position:center;color:#fff;border-left:1px solid #202020}
+.hero-card:before{display:none}.hero-card .eyebrow{color:#ead9b5}.hero-card .deal{border-color:rgba(255,255,255,.35);backdrop-filter:blur(3px)}.hero-card .deal small{color:#ddd8cd}
+.grid{background:#171717;border-color:#171717;gap:1px}.card{background:#070707}.card:hover{background:#0a0a0a}.art{height:330px;padding:0;background:#0d0d0d;border-bottom-color:#202020}.art:before,.art .glyph{display:none}.product-media{position:absolute;inset:0;width:100%;height:100%;transform:none;left:auto;top:auto;display:block;background:#101010}.product-media img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .25s ease;filter:saturate(.88) contrast(1.03)}.product-media img.loaded{opacity:1}.product-media svg{width:54%;height:54%;position:absolute;left:23%;top:23%;opacity:.45}.product-open{display:block;width:100%;padding:0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer}.product-kind{margin-top:6px;color:#777;font-size:9px;letter-spacing:.11em;text-transform:uppercase}.meta{min-height:176px;padding:17px 18px 19px}.meta:before{font-size:20px;margin-top:7px}.brandname{color:#a6a39c}.price{font-size:12px}.badge{background:rgba(7,7,7,.9);border-color:#3b3b3b;color:#eee;backdrop-filter:blur(5px)}.badge.sale{color:#dfc482;border-color:#76613b}.badge.stock{color:#ddd}.card-actions{padding:0 18px 18px;margin:0;gap:12px}.card-actions button{font-size:9px}.card-actions .buy{background:#f1f0ec;border-color:#f1f0ec;color:#050505}.card-actions .buy:hover{background:#fff}.catalog-more{display:flex;justify-content:center;align-items:center;gap:18px;padding:28px 0 8px}.catalog-more small{color:#73716d;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.catalog-more .iconbtn{min-width:120px}.detail-photo{height:min(58vh,520px);background:#0c0c0c;margin:-26px -26px 24px;overflow:hidden;border-bottom:1px solid #252525}.detail-photo img{width:100%;height:100%;object-fit:cover;display:block}.image-pref small{display:block;margin-top:9px;color:#777;line-height:1.55;font-size:10px}.order-thumb .product-media{position:relative;inset:auto;width:100%;height:100%}.order-thumb .product-media img{opacity:1}.order-thumb .product-media svg{width:54%;height:54%}
+@media(max-width:760px){.art{height:255px}.grid{gap:1px}.meta{min-height:160px}.detail-photo{height:360px}}
+@media(max-width:430px){.art{height:330px}.catalog-more{flex-direction:column;gap:10px}.hero-card{background-position:58% center}}
+</style>
+
+<style>
+/* v6 — food + polish */
+:root{--gold:#b89554}
+button,input,select,textarea{-webkit-appearance:none;appearance:none}
+.primary{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:42px;line-height:1!important;color:#050505!important;-webkit-text-fill-color:#050505!important;white-space:nowrap}
+.modal:not(.tracking-modal) .primary{background:#080808!important;border-color:#080808!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;line-height:1.15;white-space:nowrap}
+.top-actions{gap:20px}
+#cartBtn{gap:7px;border-bottom-color:transparent;padding-bottom:8px}
+#cartBtn:hover{border-bottom-color:var(--gold)}
+.cart-count{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:17px!important;min-width:17px!important;max-width:17px!important;height:17px!important;padding:0!important;margin:0!important;border-radius:50%!important;background:var(--gold)!important;color:#050505!important;-webkit-text-fill-color:#050505!important;font:700 9px/17px Arial,Helvetica,sans-serif!important;letter-spacing:0!important;transform:none!important}
+/* Restore editorial spacing lost in v5. */
+.grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:38px 20px!important;background:transparent!important;border:0!important}
+.card{background:transparent!important;overflow:visible!important}
+.card:hover{background:transparent!important}
+.art{height:320px;background:#0b0b0b;border:1px solid #1d1d1d!important}
+.product-media{background:#0b0b0b}
+.product-media img{filter:saturate(.82) contrast(1.04);transition:opacity .18s ease,filter .18s ease}
+.card:hover .product-media img{filter:saturate(.94) contrast(1.03)}
+.meta{padding:14px 2px 0!important;min-height:0!important}
+.card-actions{padding:0 2px!important;margin-top:12px!important}
+.badge{border:1px solid rgba(255,255,255,.12)!important;background:rgba(5,5,5,.82)!important;backdrop-filter:blur(8px)}
+.badge.stock{color:#e8e7e2!important}
+/* Tracker: the map now stretches with the information column instead of leaving a dead grey block. */
+.tracking-grid{grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr)!important;align-items:stretch!important;background:#202020!important;overflow:hidden}
+.gps-map{height:auto!important;min-height:440px!important;align-self:stretch!important;background:#0b0b0b!important}
+.track-side{min-height:440px!important;height:100%!important}
+.gps-map:before,.gps-map:after{inset:-35%!important;background-size:112px 80px,138px 102px!important}
+.gps-map svg{inset:0!important;height:100%!important;min-height:100%!important}
+/* Prevent anonymous blank browser buttons/controls on older Chromium builds. */
+button:disabled{opacity:.5;cursor:not-allowed}.full{width:100%}.field select{background-image:none!important}.search input{background:transparent!important;-webkit-text-fill-color:#f4f3ef!important}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.tracking-grid{grid-template-columns:minmax(0,1fr) minmax(245px,.72fr)!important}}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:28px 10px!important}.art{height:250px}.tracking-grid{grid-template-columns:1fr!important}.gps-map{min-height:310px!important}.track-side{min-height:0!important}.cart-count{width:16px!important;min-width:16px!important;max-width:16px!important;height:16px!important;font-size:8px!important;line-height:16px!important}}
+@media(max-width:430px){.grid{grid-template-columns:1fr!important}.art{height:340px}}
+/* V7 — gated storefront, styled purchase flow and street-level tracker */
+body.auth-locked{overflow:hidden}.auth-modal{width:min(480px,100%)}.auth-modal .modalbody{padding:30px}.auth-mark{text-align:center;font:400 32px/1 Georgia,"Times New Roman",serif;letter-spacing:.24em;text-indent:.24em;margin:4px 0 10px}.auth-intro{text-align:center;color:#888680;font-size:11px;line-height:1.65;margin:0 auto 24px;max-width:340px}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid #303030;margin-bottom:22px}.auth-tab{border:0;background:#0c0c0c;color:#888;padding:12px;text-transform:uppercase;letter-spacing:.12em;font-size:9px}.auth-tab.active{background:#f3f2ed;color:#050505}.auth-error{min-height:18px;color:#d3ab60;font-size:10px;margin:10px 0}.signed-in-as{border:1px solid #2c2c2c;padding:15px;margin-bottom:20px;display:flex;justify-content:space-between;gap:15px;align-items:center}.signed-in-as small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px}.signed-in-as strong{font:400 19px Georgia,"Times New Roman",serif}.signed-in-as button{flex:0 0 auto}
+.card-actions{display:block!important}.card-actions .quick-view{width:100%;display:flex;align-items:center;justify-content:space-between;border:1px solid #3a3833!important;background:#10100f!important;color:#f3f1eb!important;padding:12px 14px!important;transition:background .18s,border-color .18s,color .18s}.card-actions .quick-view:after{content:"→";color:var(--gold);font-size:14px}.card-actions .quick-view:hover{background:#f2f0ea!important;border-color:#f2f0ea!important;color:#050505!important}.detail-photo{position:relative!important;isolation:isolate;pointer-events:none;user-select:none}.detail-photo .product-media{position:absolute!important;inset:0!important;left:0!important;top:0!important;width:100%!important;height:100%!important;transform:none!important;overflow:hidden!important}.detail-photo .product-media img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;-webkit-user-drag:none}.detail-fulfillment{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#2b2b2b;border:1px solid #2b2b2b;margin:0 0 18px}.detail-fulfillment>div{background:#0d0d0d;padding:14px}.detail-fulfillment small{display:block;color:#777;font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}.detail-fulfillment strong{font-size:11px;font-weight:400;color:#e8e6df}.detail-add{min-height:52px;background:linear-gradient(135deg,#d4b56f,#a98442)!important;border:1px solid #e0c47f!important;color:#070707!important;box-shadow:0 8px 28px rgba(180,147,82,.18);font-size:10px!important;letter-spacing:.16em!important;text-transform:uppercase;transition:transform .18s,filter .18s,box-shadow .18s}.detail-add:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 12px 34px rgba(180,147,82,.25)}
+.gps-map:before,.gps-map:after{display:none!important}.map-block{fill:#121212;stroke:#292929;stroke-width:1}.map-building{fill:#191919;stroke:#343434;stroke-width:1}.map-park{fill:#132019;stroke:#2e4938;stroke-width:1}.map-water{fill:#0b171d}.map-road{fill:none;stroke:#343434;stroke-width:24;stroke-linecap:round;stroke-linejoin:round}.map-road-edge{fill:none;stroke:#151515;stroke-width:16;stroke-linecap:round;stroke-linejoin:round}.map-minor{fill:none;stroke:#292929;stroke-width:12}.map-label{fill:#797874;font:10px Arial,sans-serif;letter-spacing:.08em}.map-route-shadow{fill:none;stroke:#050505;stroke-width:9;stroke-linecap:round}.map-route{fill:none;stroke:#c8a45d;stroke-width:4;stroke-linecap:round;stroke-dasharray:8 5}
+.receipt{margin:22px 0;border:1px solid #363636;background:#0c0c0c}.receipt-head{padding:20px;border-bottom:1px solid #303030;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.receipt-logo{font:400 21px Georgia,"Times New Roman",serif;letter-spacing:.2em}.receipt-head small,.receipt-meta small{display:block;color:#73726e;font-size:8px;text-transform:uppercase;letter-spacing:.12em}.receipt-head strong{display:block;font-size:10px;font-weight:400;margin-top:5px}.receipt-meta{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#292929}.receipt-meta>div{background:#0c0c0c;padding:13px 18px}.receipt-meta strong{display:block;margin-top:5px;font-size:11px;font-weight:400}.receipt-lines{padding:8px 18px}.receipt-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:12px 0;border-bottom:1px solid #252525}.receipt-line:last-child{border-bottom:0}.receipt-line b{font:400 14px Georgia,"Times New Roman",serif}.receipt-line span{display:block;color:#777;font-size:9px;margin-top:4px}.receipt-total{padding:16px 18px;border-top:1px solid #333;display:flex;align-items:end;justify-content:space-between}.receipt-total small{color:#777;text-transform:uppercase;letter-spacing:.12em;font-size:8px}.receipt-total strong{font:400 25px Georgia,"Times New Roman",serif}.receipt-key{padding:16px 18px;border-top:1px solid #303030}.receipt-key>small{display:block;color:#b89554;font-size:8px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}.receipt-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}.mobile-key-nav{display:none!important}
+@media(max-width:760px){.modalback{padding:0;align-items:flex-end}.modal{width:100%;max-height:94dvh;border-left:0;border-right:0;border-bottom:0}.auth-modal{margin:auto;width:calc(100% - 24px);border:1px solid #303030}.modalhead{padding:18px}.modalbody{padding:18px}.detail-photo{height:38dvh;margin:-18px -18px 18px}.detail-add{position:sticky;bottom:0;z-index:2}.top-actions{gap:10px}.account-label{display:inline!important}.mobile-key-nav{display:inline-flex!important;color:var(--gold)!important;border-bottom-color:var(--gold)!important}.iconbtn{min-height:36px}.gps-label{max-width:42%;line-height:1.35}.gps-live{font-size:8px}.card-actions .quick-view{min-height:44px}.receipt-actions{grid-template-columns:1fr}.receipt-meta{grid-template-columns:1fr}.receipt-head{padding:16px}.receipt-lines,.receipt-key{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body class="auth-locked">
+<header class="topbar">
+  <a class="brand" href="#">MAI<b>SO</b>N</a>
+  <nav class="nav">
+    <button class="active" data-view="shop">Shop</button>
+    <button data-view="orders">Orders</button>
+    <button class="mobile-key-nav" id="mobileKeyBtn">MAISON Key</button>
+  </nav>
+  <div class="top-actions">
+    
+    <button class="iconbtn" id="accountBtn"><span class="account-label">My key</span></button>
+    <button class="iconbtn" id="cartBtn">Bag <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">Private shopping • by invitation</div>
+    <h1>Objects of <em>desire.</em></h1>
+    <p>Exceptional objects, automobiles, residences, private stays, travel and experiences — selected for a marketplace where almost anything can be arranged.</p>
+    <button class="primary" onclick="document.querySelector('.shell').scrollIntoView({behavior:'smooth'})">Shop new arrivals</button>
+  </div>
+  <div class="hero-card">
+    <div><div class="eyebrow">Live private offer</div><div class="big" id="heroOfferName">Preparing your offer…</div></div>
+    <div class="deal"><div><small>Your price</small><strong id="heroOfferPrice">—</strong></div><div><small>Offer expires</small><strong id="heroOfferTime">—</strong></div></div>
+  </div>
+</section>
+
+<main class="shell">
+<section class="view active" id="view-shop">
+  <div class="toolbar">
+    <div class="search">⌕ <input id="search" placeholder="Search MAISON — food, cars, villas, watches, jets…"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="sectionhead"><div><div class="eyebrow">Private departments</div><h2 id="catalogTitle">Latest selection</h2></div><small id="marketClock"></small></div>
+  <div class="grid" id="productGrid"></div>
+  <div class="catalog-more"><button class="iconbtn" id="loadMoreBtn">Load more</button><small id="catalogProgress"></small></div>
+</section>
+
+<section class="view" id="view-orders">
+  <div class="orders-header">
+    <div><div class="eyebrow">Private client services</div><h2>Orders & bookings</h2><p>Track deliveries, review reservations and view access or handover details.</p></div>
+    <small id="ordersMeta"></small>
+  </div>
+  <div class="order-list" id="ordersList"></div>
+</section>
+</main>
+
+<div class="modalback" id="authModal"><div class="modal auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="modalbody">
+    <div class="auth-mark" id="authTitle">MAISON</div>
+    <p class="auth-intro">Private access is required. Enter your MAISON key, or create a new key to begin.</p>
+    <div class="auth-tabs"><button class="auth-tab active" id="loginTab">Use MAISON key</button><button class="auth-tab" id="signupTab">Create new key</button></div>
+    <form id="authForm">
+      <div class="field" id="authKeyWrap"><label>MAISON key</label><textarea id="authKey" placeholder="MSN1…" spellcheck="false" autocomplete="off"></textarea></div>
+      <div class="notice hidden" id="createKeyNotice">A fresh private account will be created. Save the generated MAISON key—this key is the only way to return to the account.</div>
+      <div class="auth-error" id="authError" aria-live="polite"></div>
+      <button class="primary full" id="authSubmit" type="submit">Enter with key</button>
+    </form>
+    <p style="color:#666;font-size:9px;line-height:1.55;margin:17px 0 0;text-align:center">No account data is stored in your browser. Your MAISON key contains your portable account.</p>
+  </div>
+</div></div>
+
+
+<div class="modalback" id="detailModal"><div class="modal">
+  <div class="modalhead"><div><div class="brandname" id="detailBrand"></div><h2 id="detailName" style="margin-top:5px"></h2></div><button class="x" data-close="detailModal">×</button></div>
+  <div class="modalbody"><div class="detail-photo" id="detailPhoto"></div><p id="detailDesc" style="color:#92918d;line-height:1.7"></p><div class="order"><div><p id="detailSale" style="color:#c8a45d"></p><p id="detailStock"></p></div><strong id="detailPrice" style="font-size:26px"></strong></div><div class="detail-fulfillment"><div><small>Estimated fulfillment</small><strong id="detailShipping">Calculated at checkout</strong></div><div><small>Service</small><strong id="detailService">Insured delivery</strong></div></div><div class="field hidden" id="detailDurationWrap"><label><span id="detailDurationLabel">Rental duration</span><b id="detailDurationPrice"></b></label><select id="detailDuration"></select></div><button class="primary full detail-add" id="detailAdd">Add to bag</button></div>
+</div></div>
+
+<div class="modalback" id="cartModal"><div class="modal">
+  <div class="modalhead"><h2>Your bag</h2><button class="x" data-close="cartModal">×</button></div>
+  <div class="modalbody"><div id="cartItems"></div><div class="checkout-total"><div><small style="color:#777">Order total</small><strong id="cartTotal">$0</strong></div><button class="primary" id="checkoutBtn">Checkout</button></div></div>
+</div></div>
+
+<div class="modalback" id="checkoutModal"><div class="modal">
+  <div class="modalhead"><h2>Pay with Ledgered</h2><button class="x" data-close="checkoutModal">×</button></div>
+  <div class="modalbody">
+    <div class="signed-in-as"><div><small>Access</small><strong id="accountIdentity">MAISON key active</strong></div><button class="iconbtn" id="logoutBtn">Sign out</button></div>
+    <div class="notice">Pay from one Ledgered account. Your token is read locally in this browser and cleared from the field immediately after it is accepted.</div>
+    <div class="field"><label><span>Ledgered token</span><b>LEDGER1</b></label><textarea id="ledgerToken" placeholder="Paste LEDGER1…" spellcheck="false"></textarea></div>
+    <button class="iconbtn full" id="readLedger">Read Ledgered accounts</button>
+    <div id="ledgerFields" class="hidden">
+      <div class="field"><label><span>Pay from</span><b id="ledgerBalance"></b></label><select id="ledgerAccount"></select></div>
+      <div class="checkout-total"><div><small style="color:#777">Charge</small><strong id="chargeTotal">$0</strong></div></div>
+      <button class="primary full" id="placeOrder" style="margin-top:14px">Place order</button>
+    </div>
+    <div class="result hidden" id="checkoutResult">
+      <div class="receipt" id="receipt">
+        <div class="receipt-head"><div class="receipt-logo">MAISON</div><div><small>Receipt</small><strong id="receiptNumber"></strong></div></div>
+        <div class="receipt-meta"><div><small>Date</small><strong id="receiptDate"></strong></div><div><small>Paid from</small><strong id="receiptAccount"></strong></div></div>
+        <div class="receipt-lines" id="receiptItems"></div>
+        <div class="receipt-total"><small>Total paid</small><strong id="receiptTotal"></strong></div>
+        <div class="receipt-key"><small>Updated Ledgered key — keep this copy</small><div class="keybox" id="updatedLedger"></div></div>
+      </div>
+      <div class="receipt-actions"><button class="primary full" id="copyReceipt">Copy receipt</button><button class="iconbtn full" id="downloadReceipt">Download receipt</button></div>
+      <button class="iconbtn full" id="copyLedger">Copy Ledgered key only</button>
+      <div class="field"><label>Updated MAISON key</label><div class="keybox" id="updatedMaison"></div></div>
+      <button class="iconbtn full" id="copyMaison">Copy MAISON key</button>
+    </div>
+  </div>
+</div></div>
+
+<div class="modalback" id="accountModal"><div class="modal">
+  <div class="modalhead"><h2>Your account</h2><button class="x" data-close="accountModal">×</button></div>
+  <div class="modalbody">
+    <div class="notice">Your MAISON key keeps your orders and bookings portable between devices. Save the latest key after every purchase.</div>
+    <div class="field"><label>Sign in with MAISON key</label><textarea id="maisonInput" placeholder="MSN1…" spellcheck="false"></textarea></div>
+    <button class="primary full" id="loadMaison">Continue</button>
+    <div class="field"><label>Your current MAISON key</label><div class="keybox" id="currentMaison">Generating…</div></div>
+    <button class="iconbtn full" id="copyCurrentMaison">Copy current key</button>
+  </div>
+</div></div>
+
+<div class="modalback" id="trackingModal"><div class="modal tracking-modal">
+  <div class="modalhead"><div><div class="brandname" id="trackBrand"></div><h2 id="trackTitle" style="margin-top:5px">Fulfillment</h2></div><button class="x" data-close="trackingModal">×</button></div>
+  <div class="modalbody" id="trackingBody"></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(()=>{
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:n>=1e6?0:2}).format(n);
+const roundMoney=n=>Math.round((n+Number.EPSILON)*100)/100;
+const rid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-5);
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function hash32(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rand(seed){let x=hash32(String(seed));x^=x<<13;x^=x>>>17;x^=x<<5;return (x>>>0)/4294967296}
+function utf8ToBase64URL(str){const bytes=new TextEncoder().encode(str);let bin='';for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function base64URLToUTF8(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const bin=atob(s),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+function bytesToB64u(bytes){let bin='';for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64uToBytes(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const bin=atob(s),out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+async function gzip(text){if(!('CompressionStream'in window))return null;const cs=new CompressionStream('gzip');const writer=cs.writable.getWriter();writer.write(new TextEncoder().encode(text));writer.close();return new Uint8Array(await new Response(cs.readable).arrayBuffer())}
+async function gunzip(bytes){const ds=new DecompressionStream('gzip');const writer=ds.writable.getWriter();writer.write(bytes);writer.close();return new TextDecoder().decode(await new Response(ds.readable).arrayBuffer())}
+
+const PRODUCTS=[
+[1,'Maison Noir Tee','NOIR ATELIER',320,'Fashion','Heavyweight mercerized cotton. Disproportionately expensive on purpose.','N','#30291e','#111',1],
+[2,'Crystal Logo Hoodie','VANTA HOUSE',1450,'Fashion','Hand-finished crystal insignia, oversized cut.','V','#251d28','#0c0c0c',1],
+[3,'Python Weekender','SAINT RAVEL',8900,'Fashion','Hand-stitched travel bag with palladium hardware.','S','#43301d','#111',1],
+[4,'Diamond Tennis Bracelet','ORO PRIVÉ',78000,'Jewelry','18k white gold, absurdly bright, absolutely unnecessary.','O','#3a3527','#101010',1],
+[5,'Tourbillon No. 08','AUREL & CIE',485000,'Watches','Minute repeater, tourbillon, 42 mm platinum case.','A','#302814','#0e0e0e',1],
+[6,'Black Ceramic Chronograph','MERCER',29400,'Watches','Monobloc ceramic case, black dial, integrated bracelet.','M','#272727','#0b0b0b',1],
+[7,'Studio Gaming Suite','PARALLAX',128000,'Tech','Triple workstation, wall display, audio and lighting package.','P','#1a2230','#0b0f15',1],
+[8,'98-inch Cinema Wall','LUMEN',42000,'Tech','Reference display with concealed surround system.','L','#16232a','#080b0d',1],
+[9,'Carbon Grand Tourer','VELLUM',438000,'Cars','Twin-turbo V12 grand tourer, bespoke carbon bodywork.','V','#31231d','#090909',1],
+[10,'Apex R Hypercar','ARC MOTORWORKS',3900000,'Cars','Track-derived hybrid hypercar, 1 of 60.','A','#3d1717','#0d0909',1],
+[11,'Executive V12 Limousine','CROWN MOTOR CO.',690000,'Cars','Extended wheelbase, private rear cabin and chilled bar.','C','#1d2024','#08090a',1],
+[12,'Desert Rally Commission','ATLAS MOTOR',318000,'Cars','Bespoke long-travel luxury rally truck.','A','#3b3324','#0b0a07',1],
+[13,'Monaco Harbor Penthouse','MAISON ESTATES',48500000,'Property','Four terraces, harbor frontage, private lift and rooftop pool.','M','#2b2a23','#0d0d0c',1],
+[14,'Pacific Cliff Estate','MAISON ESTATES',72000000,'Property','Concrete-and-glass ocean estate with 11-car gallery.','M','#17252a','#090d0f',1],
+[15,'Private Caribbean Cay','MAISON ESTATES',185000000,'Property','A private island with villa compound, marina and helipad.','M','#19342f','#080e0c',1],
+[16,'Alpine Glass Chalet','MAISON ESTATES',16800000,'Property','Slope-side residence with spa, wine room and private gondola.','M','#293039','#0b0d10',1],
+[17,'Gulfstream-Class Charter','MONARCH AIR',184500,'Travel','Toronto to Monaco, private cabin, catering and chauffeur.','M','#272719','#0b0b08',0],
+[18,'Around-the-World Jet Month','MONARCH AIR',8900000,'Travel','30 days, 12 cities, private aviation and five-star suites.','M','#261d31','#0b090d',0],
+[19,'Maldives Buyout Week','AURELIA TRAVEL',2700000,'Travel','Entire private-island resort reserved for your party.','A','#133139','#070d0f',0],
+[20,'Superyacht Monaco Week','CROWN MARINE',1300000,'Travel','Seven-day 95m yacht charter with crew and helicopter transfer.','C','#172733','#070a0d',0],
+[21,'Falcon 10X-Class Jet','MONARCH AVIATION',74500000,'Aircraft','Ultra-long-range private aircraft with master suite.','M','#24282b','#090a0b',1],
+[22,'Executive Helicopter','MONARCH AVIATION',9200000,'Aircraft','Twin-engine executive helicopter with bespoke cabin.','M','#252525','#080808',1],
+[23,'95m Superyacht','CROWN MARINE',168000000,'Yachts','Beach club, cinema, helipad and 18-guest accommodation.','C','#13232b','#070a0c',1],
+[24,'48m Fast Yacht','CROWN MARINE',42500000,'Yachts','High-speed aluminum yacht with four suites.','C','#17242a','#070a0b',1],
+[25,'Private Arena Concert','ENCORE',6500000,'Experiences','Arena, production, hospitality and your chosen headliner equivalent.','E','#32182c','#0d080c',0],
+[26,'Grand Prix Hospitality','APEX CLUB',285000,'Experiences','Private suite, paddock access and helicopter transfers for 12.','A','#2f2418','#0d0a08',0],
+[27,'Michelin-Level Chef Year','MAISON CONCIERGE',1200000,'Experiences','Private chef and culinary team retained for one year.','M','#302718','#0d0b08',0],
+[28,'Museum-Grade Fossil','CABINET 1888',3800000,'Collectibles','Large display specimen with museum-style mount and provenance.','C','#3a2b1e','#0d0906',1],
+[29,'One-of-One Neon Sculpture','ARCHIVE',890000,'Collectibles','Large-format light sculpture, commissioned and signed.','A','#2d1740','#0c0710',1],
+[30,'Gold-Plated Espresso Machine','RIDICULE',125000,'Ridiculous','Because stainless steel was apparently unacceptable.','R','#46391d','#100d07',1],
+[31,'Marble Bathtub Carved From One Block','RIDICULE',460000,'Ridiculous','Two-ton monolithic stone bath with white-glove installation.','R','#333333','#0d0d0d',1],
+[32,'24k Gold Toilet','RIDICULE',780000,'Ridiculous','Functional. Heavy. Financially irresponsible.','R','#493b18','#120f06',1],
+[33,'Billionaire Mystery Vault','MAISON VAULT',5000000,'Mystery','One deterministic reveal. Could be legendary. Could be deeply disrespectful.','V','#3b2c15','#0d0a06',0],
+[34,'Whale Mystery Vault','MAISON VAULT',250000,'Mystery','Premium deterministic mystery opening.','V','#27213a','#0b0910',0],
+[35,'Designer Mystery Case','MAISON VAULT',2500,'Mystery','Accessories, fashion, collectibles, or disappointment.','V','#2b1c20','#0c0809',0],
+[36,'Billionaire Draw — 100 Tickets','MAISON DRAW',10000000,'Lottery','100 simulated entries in the next deterministic billionaire draw.','D','#203019','#0a0e08',0],
+[37,'Luxury Draw — 250 Tickets','MAISON DRAW',250000,'Lottery','250 simulated entries in the next luxury draw.','D','#2c2617','#0c0a07',0],
+[38,'Daily Millions — 1000 Tickets','MAISON DRAW',20000,'Lottery','One thousand simulated daily draw entries.','D','#1a2f2b','#080e0c',0],
+[39,'Private Stadium Naming Rights','MONUMENT',120000000,'Ridiculous','Five-year simulated naming package for an enormous fictional stadium.','M','#322517','#0d0a07',1],
+[40,'Orbital Art Payload','MONUMENT',26000000,'Ridiculous','Commission and simulated launch of an art object to orbit.','M','#151d2e','#080a0f',0],
+[41,'Vineyard Estate & Winery','MAISON ESTATES',36000000,'Property','Working vineyard, stone estate, cellar and hospitality wing.','M','#29301d','#0b0d08',1],
+[42,'Downtown Mega-Penthouse','MAISON ESTATES',110000000,'Property','Three-floor skyline residence with private motor court.','M','#252329','#0b0a0c',1],
+[43,'Diamond Signet Ring','ORO PRIVÉ',185000,'Jewelry','Emerald-cut center stone and pavé platinum setting.','O','#383126','#0e0c09',1],
+[44,'Crocodile Trunk Set','SAINT RAVEL',240000,'Fashion','Seven-piece travel trunk collection with brass fittings.','S','#3b251a','#0e0907',1],
+[45,'Listening Room Commission','PARALLAX',780000,'Tech','Architectural acoustic build with reference two-channel system.','P','#202831','#080b0e',1],
+[46,'Private Cinema Commission','PARALLAX',1450000,'Tech','20-seat screening room, projection, sound and interior build.','P','#241c25','#0b080c',1],
+[47,'Lake Como Villa Month','AURELIA TRAVEL',740000,'Travel','Thirty-night lakeside villa with staff, cars and boat.','A','#1a302d','#080e0d',0],
+[48,'Antarctic Jet Expedition','AURELIA TRAVEL',2200000,'Travel','Private jet expedition with polar camp and specialist crew.','A','#27313a','#0c0f12',0],
+[49,'Black Marble Penthouse — Night','MAISON STAYS',18500,'Rentals','One night in a three-floor private penthouse with rooftop pool, chef kitchen and chauffeur arrival.','M','#111','#050505',0,'night'],
+[50,'Private Nightclub Takeover','NOIR SOCIAL',95000,'Rentals','Rent the entire club after dark: bars, sound system, security, staff and a brutally specific closing time.','N','#111','#050505',0,'hour'],
+[51,'Lakefront Glass House — Night','MAISON STAYS',8200,'Rentals','Private waterfront glass house with sauna, dock and late checkout.','M','#111','#050505',0,'night'],
+[52,'Skyline Presidential Suite','CROWN HOUSE',14600,'Rentals','Top-floor suite, butler service, private dining room and city-wide views.','C','#111','#050505',0,'night'],
+[53,'Private Island Villa — Night','AURELIA STAYS',54000,'Rentals','Beachfront villa compound with boat transfer, staff and private chef.','A','#111','#050505',0,'night'],
+[54,'Warehouse Party Venue','NOIR SOCIAL',38000,'Rentals','Industrial event space with lighting rig, security, staff and sound. Yours for the booked hours.','N','#111','#050505',0,'hour'],
+[55,'Alpine Chalet — Night','MAISON STAYS',12750,'Rentals','Ski-in chalet with hot pool, cinema room and mountain staff.','M','#111','#050505',0,'night'],
+[56,'Private Beach Club','AURELIA CLUB',62000,'Rentals','Exclusive beach club access with cabanas, DJ booth, staff and sunset service.','A','#111','#050505',0,'hour']
+].map(x=>({id:x[0],name:x[1],brand:x[2],price:x[3],cat:x[4],desc:x[5],glyph:x[6],c1:x[7],c2:x[8],durable:!!x[9],unit:x[10]||''}));
+
+const IMAGE_POOLS={
+ Fashion:[28881154,19166246,26775751],
+ Jewelry:[31459470,7541802,7700270],
+ Watches:[16562977,6157724],
+ Tech:[7720712,6498277],
+ Cars:[5050536,6969035,8664304],
+ Property:[31737861,6292341,8085317],
+ Aircraft:[35517954,14914173],
+ Yachts:[14412125,15487494,35569685],
+ Travel:[5563472,5860693,4186560],
+ Experiences:[16935974,19569865],
+ Collectibles:[16922994,30150856],
+ Ridiculous:[12794706,19569865],
+ Mystery:[12794706,31459470],
+ Lottery:[16935974,1398266],
+ Rentals:[5860693,20798291,8134746],
+ Food:[30469688,30469692,14459158,28879270,29259651]
+};
+
+function pexelsUrl(id,w=480,h=600){return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}&h=${h}&fit=crop&dpr=1`}
+function imageIdFor(p){const pool=IMAGE_POOLS[p.cat]||IMAGE_POOLS.Fashion;return pool[hash32(`photo:${p.id}:${p.name}`)%pool.length]}
+function priceBand(base,i){const mult=[.82,.94,1,1.08,1.22,1.38][i%6];return roundMoney(Math.max(50,base*mult))}
+function addGeneratedCatalog(){
+ let id=PRODUCTS.length?Math.max(...PRODUCTS.map(p=>p.id))+1:1;
+ const add=(name,brand,price,cat,desc,durable=1,unit='')=>PRODUCTS.push({id:id++,name,brand,price:roundMoney(price),cat,desc,glyph:brand[0]||'M',c1:'#111',c2:'#050505',durable:!!durable,unit});
+ const loop=(brands,names,cat,base,desc,durable=1,limit=999)=>{let n=0;outer:for(let b=0;b<brands.length;b++)for(let i=0;i<names.length;i++){add(names[i],brands[b],priceBand(base*(1+(i%5)*.24),b+i),cat,desc(names[i],brands[b],i),durable);if(++n>=limit)break outer}};
+ loop(['NOIR ATELIER','SAINT RAVEL','VANTA HOUSE','CALDER ROW','MERCER HOUSE','ARC NOIR'],['Cashmere Zip Hoodie','Distressed Crystal Denim','Silk Camp Shirt','Heavyweight Logo Tee','Leather Varsity Jacket','Double-Face Wool Coat','Tailored Cargo Trouser','Washed Black Jean','Crystal Runner Sneaker','Calfskin Loafer','Structured Tote','Mini Shoulder Bag'], 'Fashion',1100,(n,b,i)=>`${n} from ${b}, finished in a numbered seasonal production with premium materials and house hardware.`,1,72);
+ loop(['ORO PRIVÉ','AUREL & CIE','VANTA JEWELS','MAISON HAUTE','CALDER FINE'],['Diamond Signet','Emerald Line Bracelet','Sapphire Cocktail Ring','Pavé Link Necklace','Diamond Hoop Pair','Black Onyx Cuff','Emerald Pendant','Platinum Tennis Bracelet'], 'Jewelry',38000,(n)=>`${n} in precious metal with hand-set stones and a private-client presentation case.`,1,36);
+ loop(['AUREL & CIE','MERCER','CROWN HOROLOGY','VELLUM TIME'],['Tourbillon No. 12','Perpetual Calendar 41','Black Ceramic Automatic','Platinum Minute Repeater','Skeleton Dual Time','Moonphase Reserve','Integrated Chronograph','Diamond Bezel Automatic'], 'Watches',68000,(n)=>`${n} with mechanical movement, hand-finished casework and individually numbered production.`,1,32);
+ loop(['PARALLAX','LUMEN','VANTA SYSTEMS','ARC AUDIO'],['Reference Gaming Suite','Cinema Wall 110','Two-Channel Listening Room','Studio Workstation','OLED Gallery Display','Reference Headphone System','Private Screening Room'], 'Tech',42000,(n)=>`${n} commissioned, delivered and calibrated as a complete premium installation.`,1,28);
+ loop(['VELLUM','ARC MOTORWORKS','CROWN MOTOR CO.','ATLAS MOTOR','NOIR AUTOMOBILI','RAVELLE MOTORS'],['V12 Grand Tourer','Carbon Track Coupé','Executive Limousine','Open-Top Speedster','Hybrid Hypercar','Bespoke Rally SUV'], 'Cars',480000,(n,b,i)=>`${n} by ${b}, specified with bespoke paint, hand-finished interior and delivery inspection.`,1,36);
+ loop(['MAISON ESTATES','CROWN RESIDENCES','AURELIA PROPERTY','NOIR REALTY'],['Harbor Penthouse','Clifftop Glass Estate','Private Island Compound','Alpine Chalet','Vineyard Estate','Skyline Triplex','Desert Modern Residence'], 'Property',19000000,(n)=>`${n} offered with private viewing, closing coordination and a scheduled handover.`,1,28);
+ loop(['MONARCH AVIATION','CROWN AIR','AURELIA AEROSPACE','VELLUM FLIGHT'],['Ultra-Long-Range Jet','Executive Twin Jet','Private Helicopter','Intercontinental Cabin Jet'], 'Aircraft',17000000,(n)=>`${n} configured for private use with bespoke cabin, delivery inspection and hangar handover.`,1,16);
+ loop(['CROWN MARINE','AURELIA YACHTS','MONARCH MARINE','VELLUM NAUTIQUE'],['95m Superyacht','72m Explorer Yacht','48m Fast Yacht','30m Day Yacht'], 'Yachts',22000000,(n)=>`${n} with crew-ready specification, guest suites and private marina handover.`,1,16);
+ loop(['AURELIA TRAVEL','MONARCH AIR','CROWN VOYAGES','MAISON JOURNEYS'],['Monaco Jet Weekend','Maldives Private-Island Week','Lake Como Villa Month','Antarctic Jet Expedition','Tokyo Penthouse Week','Mediterranean Yacht Circuit','Around-the-World Jet Month'], 'Travel',380000,(n)=>`${n} arranged end-to-end with private transfers, premium accommodation and concierge coordination.`,0,28);
+ loop(['ENCORE','APEX CLUB','MAISON CONCIERGE','NOIR EVENTS'],['Private Arena Concert','Grand Prix Hospitality','After-Hours Museum Dinner','Chef Residency','Fashion Week House Access','Private Track Day'], 'Experiences',180000,(n)=>`${n} reserved as a private-client experience with dedicated access and service coordination.`,0,24);
+ loop(['CABINET 1888','ARCHIVE','MONUMENT EDITIONS','NOIR OBJECTS'],['Museum-Grade Fossil','Signed Light Sculpture','Masterwork Painting','Rare Design Prototype','Historic Racing Artifact','One-of-One Installation'], 'Collectibles',620000,(n)=>`${n} supplied with provenance documentation and specialist white-glove delivery.`,1,24);
+ loop(['RIDICULE','MONUMENT','MAISON EXCESS','CROWN ABSURD'],['Gold Espresso Machine','Monolithic Marble Bath','24k Gold Toilet','Private Stadium Naming Package'], 'Ridiculous',420000,(n)=>`${n}. It exists because apparently restraint was never part of the brief.`,1,16);
+ for(let i=0;i<8;i++)add(['Designer Mystery Case','Whale Mystery Vault','Billionaire Mystery Vault','Black Label Vault'][i%4]+` ${String(i+1).padStart(2,'0')}`,'MAISON VAULT',[2500,250000,5000000,12000000][i%4],'Mystery','A deterministic reveal with published simulated odds and a fixed result tied to your account and purchase.',0);
+ for(let i=0;i<8;i++)add(['Daily Millions','Luxury Draw','Billionaire Draw','Midnight Draw'][i%4]+` — ${[1000,250,100,50][i%4]} Tickets`,'MAISON DRAW',[20000,250000,10000000,25000000][i%4],'Lottery','A simulated ticket bundle for the next deterministic draw. No real money or real lottery is involved.',0);
+
+ const foodBrands=['MAISON PANTRY','CROWN TABLE','NOIR KITCHEN','AURELIA PATISSERIE','ORO MARKET','VANTA DELI'];
+ const foodNames=['A5 Wagyu Dinner Box','Osetra Caviar Service','Black Truffle Pasta Kit','Omakase Sushi Box','King Crab Tower','Lobster Dinner for Two','Saffron Risotto Kit','Truffle Smash Burger Set','Caviar Blini Service','Wagyu Slider Box','Bluefin Tuna Selection','Grand Seafood Plateau'];
+ let fn=0;outerFood:for(let b=0;b<foodBrands.length;b++)for(let i=0;i<foodNames.length;i++){
+   const base=[420,780,260,540,690,460,220,180,320,210,590,880][i];
+   add(foodNames[i],foodBrands[b],priceBand(base,b+i),'Food',`${foodNames[i]} prepared or packed to order with premium ingredients and priority local delivery.`,0);
+   if(++fn>=72)break outerFood;
+ }
+ const rentalBrands=['MAISON STAYS','CROWN HOUSE','AURELIA STAYS','NOIR SOCIAL','MONARCH RESERVE','VANTA VENUES'];
+ const rentals=[['Skyline Penthouse — Night',18500,'night'],['Private Island Villa — Night',54000,'night'],['Lakefront Glass House — Night',8200,'night'],['Presidential Suite — Night',14600,'night'],['Alpine Chalet — Night',12750,'night'],['Private Nightclub Takeover',95000,'hour'],['Warehouse Party Venue',38000,'hour'],['Private Beach Club',62000,'hour']];
+ let rn=0;outer:for(const b of rentalBrands)for(let i=0;i<rentals.length;i++){const [name,price,unit]=rentals[i];add(name,b,priceBand(price,rn), 'Rentals',unit==='night'?`${name} with private-client arrival, service coordination and a defined checkout window.`:`${name} with staff, security, sound and a hard end time shown live in your booking.`,0,unit);if(++rn>=48)break outer}
+}
+addGeneratedCatalog();
+
+const CATS=['All',...new Set(PRODUCTS.map(p=>p.cat))];
+let cart=[];let parsedLedger=null;let state={v:1,seed:(crypto.getRandomValues(new Uint32Array(1))[0]>>>0),orders:[],spent:0,saved:0};
+let activeCat='All',query='',displayLimit=32;
+let authMode='login',keyAuthenticated=false;
+function setAuthMode(mode){authMode=mode;$('#loginTab').classList.toggle('active',mode==='login');$('#signupTab').classList.toggle('active',mode==='signup');$('#authKeyWrap').classList.toggle('hidden',mode==='signup');$('#createKeyNotice').classList.toggle('hidden',mode!=='signup');$('#authSubmit').textContent=mode==='signup'?'Create MAISON key':'Enter with key';$('#authError').textContent=''}
+function unlockWithKey(){keyAuthenticated=true;document.body.classList.remove('auth-locked');close('authModal');$('#accountIdentity').textContent='MAISON key active';$('#accountBtn .account-label').textContent='My key'}
+function requireAuth(){document.body.classList.add('auth-locked');open('authModal');setAuthMode('login');setTimeout(()=>$('#authKey').focus(),50)}
+
+function marketState(p,at=Date.now()){
+ const baseSlot=Math.floor(at/(3*3600e3));
+ const durationSlots=rand('dur'+p.id+Math.floor(baseSlot/8))>.78?24:1; // ~3h or ~3d
+ const slot=Math.floor(baseSlot/durationSlots)*durationSlots;
+ const saleRoll=rand('sale'+p.id+slot);
+ const onSale=saleRoll>.64;
+ const disc=onSale?[5,10,15,20,25,30,35,40,50,60,70][Math.floor(rand('disc'+p.id+slot)*11)]:0;
+ const start=slot*3*3600e3,end=start+durationSlots*3*3600e3;
+ const scarce=['Cars','Property','Aircraft','Yachts','Collectibles','Rentals'].includes(p.cat);
+ let stock=scarce?1+Math.floor(rand('stock'+p.id+slot)*8):10+Math.floor(rand('stock'+p.id+slot)*190);
+ if(rand('sold'+p.id+slot)>.97)stock=0;
+ if(typeof state!=='undefined'&&state?.orders){const bought=state.orders.filter(o=>o.i===p.id&&o.t>=start&&o.t<end).reduce((n,o)=>n+(p.cat==='Rentals'?1:o.q),0);stock=Math.max(0,stock-bought)}
+ const price=roundMoney(p.price*(1-disc/100));
+ return {onSale,disc,start,end,stock,price,slot};
+}
+function fmtLeft(ms){if(ms<=0)return'00:00';const s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?`${d}d ${h}h`:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`}
+function renderChips(){ $('#chips').innerHTML=CATS.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join('');$$('[data-cat]').forEach(b=>b.onclick=()=>{activeCat=b.dataset.cat;displayLimit=32;renderChips();renderProducts()}) }
+function fallbackVector(p){
+ const common='viewBox="0 0 120 120" aria-hidden="true"';let body='<circle class="fill" cx="60" cy="60" r="38"/><path d="M60 22v76M22 60h76"/>';
+ if(p.cat==='Cars')body='<path class="fill" d="M18 69 29 48c3-6 8-10 15-11h32c7 1 12 5 15 11l11 21 7 5v13H11V74l7-5Z"/><circle cx="34" cy="85" r="8"/><circle cx="86" cy="85" r="8"/>';
+ if(p.cat==='Property'||p.cat==='Rentals')body='<path class="fill" d="M19 57 60 24l41 33v42H19V57Z"/><path d="M48 99V72h24v27"/>';
+ if(p.cat==='Aircraft')body='<path class="fill" d="M57 17h7l8 36 30 13v8L73 70l-6 31h-13l-6-31-30 4v-8l30-13 9-36Z"/>';
+ if(p.cat==='Yachts')body='<path class="fill" d="M17 72h86L90 93H30L17 72Z"/><path d="M43 72V39h30l18 33"/>';
+ if(p.cat==='Watches')body='<rect class="fill" x="38" y="26" width="44" height="68" rx="20"/><circle cx="60" cy="60" r="19"/>';
+ return `<svg ${common}>${body}</svg>`;
+}
+function productMedia(p,detail=false){
+ const id=imageIdFor(p),src=pexelsUrl(id,480,600);
+ return `<img src="${src}" alt="${escapeHTML(p.name)}" loading="lazy" decoding="async" fetchpriority="low" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.insertAdjacentHTML('afterend',decodeURIComponent('${encodeURIComponent(fallbackVector({cat:p.cat}))}'))">`;
+}
+function unitText(p,q=1){if(!p.unit)return'';return `${q} ${p.unit}${q===1?'':'s'}`}
+function durationOptions(p){
+ if(p.unit==='hour')return [4,6,8,10,12].map(n=>`<option value="${n}">${n} hours</option>`).join('');
+ return [1,2,3,5,7,14,30].map(n=>`<option value="${n}">${n} night${n===1?'':'s'}</option>`).join('');
+}
+function renderProducts(){
+ const now=Date.now();
+ const filtered=PRODUCTS.filter(p=>(activeCat==='All'||p.cat===activeCat)&&(!query||(`${p.name} ${p.brand} ${p.cat} ${p.desc}`.toLowerCase().includes(query))));
+ const list=filtered.slice(0,displayLimit);
+ $('#catalogTitle').textContent=activeCat==='All'?'New arrivals':activeCat;
+ $('#marketClock').textContent=`${filtered.length} ${filtered.length===1?'item':'items'}`;
+ $('#productGrid').innerHTML=list.map(p=>{
+   const m=marketState(p,now),unit=p.unit?` <span class="unit-price">/ ${p.unit}</span>`:'';
+   const stock=m.stock===0?'<span class="badge stock">Unavailable</span>':m.stock<=3?`<span class="badge stock">Only ${m.stock} remaining</span>`:'';
+   const sale=m.onSale?`<span class="badge sale">${m.disc}% off</span>`:'';
+   return `<article class="card ${m.stock===0?'sold':''}">
+     <button class="product-open" onclick="window.__detail(${p.id})" aria-label="View ${escapeHTML(p.name)}">
+       <div class="art"><div class="product-media">${productMedia(p)}</div>${sale}${stock}</div>
+       <div class="meta" data-title="${escapeHTML(p.name).replace(/&quot;/g,'&amp;quot;')}">
+         <div class="brandname">${escapeHTML(p.brand)}</div>
+         <div class="product-kind">${escapeHTML(p.cat)}${p.unit?` · ${escapeHTML(p.unit)} rental`:''}</div>
+         <div class="price-row"><span class="price">${money(m.price)}${unit}</span>${m.onSale?`<span class="was">${money(p.price)}</span>`:''}</div>
+       </div>
+     </button>
+     <div class="card-actions"><button class="quick-view" onclick="window.__detail(${p.id})" ${m.stock?'':'disabled'}><span>${m.stock?'Quick view & '+(p.cat==='Rentals'?'reserve':'add to bag'):'Currently unavailable'}</span></button></div>
+   </article>`
+ }).join('')||'<div class="empty" style="grid-column:1/-1">No items match your search.</div>';
+ const more=$('#loadMoreBtn'),progress=$('#catalogProgress');
+ progress.textContent=filtered.length?`Showing ${Math.min(list.length,filtered.length)} of ${filtered.length}`:'';
+ more.classList.toggle('hidden',list.length>=filtered.length);
+}
+window.__add=(id,qty=1)=>{const p=PRODUCTS.find(x=>x.id===id),m=marketState(p);if(!m.stock)return toast('That item is currently unavailable.');qty=Math.max(1,Math.floor(qty)||1);const found=cart.find(x=>x.id===id);if(found){if(p.cat==='Rentals')found.q=qty;else found.q=Math.min(found.q+qty,m.stock)}else cart.push({id,q:p.cat==='Rentals'?qty:Math.min(qty,m.stock)});renderCartCount();toast(p.cat==='Rentals'?`${p.name} reservation added.`:p.name+' added to your bag.')};
+function fulfillmentEstimate(p){if(p.cat==='Food')return['25–55 minutes','Priority local courier'];if(p.cat==='Rentals')return['At reserved start time','Private-client check-in'];if(p.cat==='Travel')return['Itinerary within 2 hours','Concierge confirmation'];if(p.cat==='Experiences')return['Access details within 1 hour','Digital reservation'];if(p.cat==='Lottery')return['Instant registration','Digital ticket delivery'];if(p.cat==='Property')return['Closing in 2–5 business days','Private handover'];if(['Aircraft','Yachts','Cars'].includes(p.cat))return['Handover in 1–3 business days','Insured specialist transport'];if(['Jewelry','Watches','Collectibles'].includes(p.cat))return['1–2 business days','Insured white-glove delivery'];return['2–4 business days','Tracked insured delivery']}
+window.__detail=id=>{const p=PRODUCTS.find(x=>x.id===id),m=marketState(p),fulfill=fulfillmentEstimate(p);$('#detailName').textContent=p.name;$('#detailBrand').textContent=p.brand+' • '+p.cat;$('#detailPhoto').innerHTML=`<div class="product-media">${productMedia(p,true)}</div>`;$('#detailDesc').textContent=p.desc;$('#detailShipping').textContent=fulfill[0];$('#detailService').textContent=fulfill[1];$('#detailStock').textContent=m.stock===0?'Currently unavailable':m.stock<=3?`Limited availability · ${m.stock} remaining`:'Available';$('#detailSale').textContent=m.onSale?`Private offer · ${m.disc}% off · ${fmtLeft(m.end-Date.now())} remaining`:'Available through MAISON';const wrap=$('#detailDurationWrap'),sel=$('#detailDuration');if(p.cat==='Rentals'){wrap.classList.remove('hidden');$('#detailDurationLabel').textContent=p.unit==='hour'?'Rental length':'Stay length';sel.innerHTML=durationOptions(p);const refresh=()=>{$('#detailPrice').textContent=money(m.price*Number(sel.value));$('#detailDurationPrice').textContent=`${money(m.price)} / ${p.unit}`};sel.onchange=refresh;refresh()}else{wrap.classList.add('hidden');$('#detailPrice').textContent=money(m.price)}$('#detailAdd').textContent=p.cat==='Rentals'?'Reserve':'Add to bag';$('#detailAdd').disabled=!m.stock;$('#detailAdd').onclick=()=>{window.__add(p.id,p.cat==='Rentals'?Number(sel.value):1);close('detailModal')};open('detailModal')};
+function renderCartCount(){$('#cartCount').textContent=cart.reduce((a,x)=>a+(PRODUCTS.find(p=>p.id===x.id)?.cat==='Rentals'?1:x.q),0)}
+function cartCalc(){let total=0,save=0;for(const x of cart){const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p);total+=m.price*x.q;save+=(p.price-m.price)*x.q}return {total:roundMoney(total),save:roundMoney(save)}}
+function renderCart(){const now=Date.now();$('#cartItems').innerHTML=cart.length?cart.map(x=>{const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p);const detail=p.cat==='Rentals'?`${unitText(p,x.q)} • ${money(m.price)} / ${p.unit}`:`Qty ${x.q} • ${money(m.price)} each`;return `<div class="order"><div><h3>${escapeHTML(p.name)}</h3><p>${escapeHTML(p.brand)} • ${detail}</p>${m.onSale?`<p style="color:#c8a45d">-${m.disc}% sale ends in ${fmtLeft(m.end-now)}</p>`:''}</div><button class="x" onclick="window.__remove(${p.id})">×</button></div>`}).join(''):'<div class="empty">Your bag is dangerously responsible.</div>';$('#cartTotal').textContent=money(cartCalc().total);$('#checkoutBtn').disabled=!cart.length}
+window.__remove=id=>{cart=cart.filter(x=>x.id!==id);renderCart();renderCartCount()};
+
+function fulfillmentMode(p){
+ if(p.cat==='Rentals')return'rental';
+ if(p.cat==='Travel')return'travel';
+ if(p.cat==='Experiences')return'experience';
+ if(p.cat==='Lottery')return'lottery';
+ if(p.cat==='Property')return'property';
+ if(['Aircraft','Yachts'].includes(p.cat))return'handover';
+ if(['Fashion','Jewelry','Watches','Tech','Collectibles','Ridiculous','Mystery','Cars','Food'].includes(p.cat))return'delivery';
+ return'order';
+}
+function deliveryProfile(order){const seed=`delivery:${state.seed}:${order.n}:${order.i}`;const mins=22+Math.floor(rand(seed)*37);const total=mins*60e3;const elapsed=Math.max(0,Date.now()-order.t);const progress=Math.min(1,elapsed/total);const km0=4+rand(seed+'km')*17;const km=Math.max(0,km0*(1-progress));const eta=Math.max(0,total-elapsed);const stages=['Order confirmed','Courier assigned','Picked up','On the way','Approaching','Delivered'];const cuts=[0,.08,.18,.34,.78,1];let idx=0;for(let i=0;i<cuts.length;i++)if(progress>=cuts[i])idx=i;return{total,progress,km,eta,mins,stages,idx,label:stages[idx],done:progress>=1,courier:`CROWN-${String(hash32(seed)%900+100)}`}}
+function nextLocalHour(ts,hour){const d=new Date(ts);d.setMinutes(0,0,0);if(d.getHours()>=hour)d.setDate(d.getDate()+1);d.setHours(hour);return d.getTime()}
+function rentalWindow(order,p){if(p.unit==='hour'){const start=nextLocalHour(order.t,21),end=start+order.q*3600e3;return{start,end,kind:'Venue access',endLabel:'You need to be out by'}}const start=nextLocalHour(order.t,16),d=new Date(start);d.setDate(d.getDate()+order.q);d.setHours(11,0,0,0);return{start,end:d.getTime(),kind:'Check-in',endLabel:'Checkout'}}
+function scheduledInfo(order,p,mode){
+ if(mode==='rental'){const w=rentalWindow(order,p),now=Date.now();return{start:w.start,end:w.end,title:now<w.start?'Reservation confirmed':now<w.end?'Rental active':'Rental completed',aLabel:w.kind,a:w.start,bLabel:w.endLabel,b:w.end,countdown:now<w.start?w.start-now:now<w.end?w.end-now:0,countLabel:now<w.start?'Access begins in':now<w.end?'Time remaining':'Rental ended',urgent:now>=w.start&&now<w.end&&w.end-now<3600e3}}
+ if(mode==='travel'){const start=order.t+(8+Math.floor(rand('trip'+order.n)*12))*3600e3,end=start+Math.max(6,order.q*8)*3600e3;return{start,end,title:Date.now()<start?'Itinerary confirmed':Date.now()<end?'Trip in progress':'Trip completed',aLabel:'Departure',a:start,bLabel:'Itinerary closes',b:end,countdown:Math.max(0,(Date.now()<start?start:end)-Date.now()),countLabel:Date.now()<start?'Departure in':'Trip time remaining'}}
+ if(mode==='experience'){const start=nextLocalHour(order.t,20),end=start+(3+Math.floor(rand('event'+order.n)*4))*3600e3;return{start,end,title:Date.now()<start?'Access reserved':Date.now()<end?'Experience active':'Experience completed',aLabel:'Access opens',a:start,bLabel:'Event ends',b:end,countdown:Math.max(0,(Date.now()<start?start:end)-Date.now()),countLabel:Date.now()<start?'Starts in':'Time remaining'}}
+ if(mode==='lottery'){const draw=nextLocalHour(order.t,21);return{start:draw,end:draw+10*60e3,title:Date.now()<draw?'Tickets registered':'Draw completed',aLabel:'Draw time',a:draw,bLabel:'Ticket packs',textB:String(order.q),countdown:Math.max(0,draw-Date.now()),countLabel:Date.now()<draw?'Draw in':'Draw complete'}}
+ if(mode==='property'){const appt=order.t+(2+Math.floor(rand('property'+order.n)*4))*3600e3,handover=appt+2*3600e3;return{start:appt,end:handover,title:Date.now()<appt?'Closing scheduled':Date.now()<handover?'Closing in progress':'Property acquired',aLabel:'Closing appointment',a:appt,bLabel:'Handover',b:handover,countdown:Math.max(0,(Date.now()<appt?appt:handover)-Date.now()),countLabel:Date.now()<appt?'Closing in':'Handover in'}}
+ if(mode==='handover'){const appt=order.t+(1+Math.floor(rand('handover'+order.n)*3))*3600e3,end=appt+90*60e3;return{start:appt,end,title:Date.now()<appt?'Handover scheduled':Date.now()<end?'Handover active':'Possession transferred',aLabel:p.cat==='Yachts'?'Marina handover':'Hangar handover',a:appt,bLabel:'Possession transfer',b:end,countdown:Math.max(0,(Date.now()<appt?appt:end)-Date.now()),countLabel:Date.now()<appt?'Appointment in':'Handover time remaining'}}
+ return null
+}
+function fmtCountdown(ms){if(ms<=0)return'00:00:00';const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`}
+function revealFor(order){const p=PRODUCTS.find(x=>x.id===order.i);const r=rand(`${state.seed}:${order.n}:${order.i}`);if(p.cat==='Mystery'){const pool=[PRODUCTS[0],PRODUCTS[3],PRODUCTS[5],PRODUCTS[8],PRODUCTS[27],PRODUCTS[28],PRODUCTS[30]];const pick=pool[Math.min(pool.length-1,Math.floor(r*pool.length))];return `Vault reveal: ${pick.name} (${money(pick.price)})`}if(p.cat==='Lottery'){const mult=r>.999?250:r>.995?25:r>.97?4:r>.82?.8:.02;return `Draw result: ${money(roundMoney(p.price*mult))} simulated prize`}return''}
+function orderNumber(o){return 'MN-'+(hash32(`${state.seed}:${o.n}:${o.t}`)%90000000+10000000)}
+function orderSummary(o,p){const mode=fulfillmentMode(p);if(mode==='delivery'){const d=deliveryProfile(o);return d.done?'Delivered':`${d.label} • ETA ${fmtCountdown(d.eta)}`}const inf=scheduledInfo(o,p,mode);if(inf)return inf.title;return'Order confirmed'}
+function renderOrders(){
+ const orders=[...state.orders].reverse();
+ $('#ordersMeta').textContent=orders.length?`${orders.length} ${orders.length===1?'order or booking':'orders & bookings'}`:'No activity yet';
+ $('#ordersList').innerHTML=orders.length?orders.map(o=>{
+   const p=PRODUCTS.find(x=>x.id===o.i),rev=revealFor(o),mode=fulfillmentMode(p),qty=p.cat==='Rentals'?unitText(p,o.q):o.q>1?`Quantity ${o.q}`:'';
+   const action=mode==='delivery'?'Track delivery':mode==='rental'?'Booking details':mode==='travel'?'View itinerary':mode==='experience'?'Access details':mode==='property'||mode==='handover'?'Handover details':'View details';
+   return `<article class="order-card"><div class="order-thumb"><div class="product-media">${productMedia(p)}</div></div><div class="order-copy"><div class="brandname">${escapeHTML(p.brand)}</div><h3>${escapeHTML(p.name)}</h3><p>${escapeHTML(orderNumber(o))} · ${new Date(o.t).toLocaleDateString([], {year:'numeric',month:'short',day:'numeric'})}${qty?` · ${escapeHTML(qty)}`:''}</p>${rev?`<p class="order-extra">${escapeHTML(rev)}</p>`:''}</div><div class="order-right"><strong>${money(o.a)}</strong><span class="status ${mode==='delivery'?'gold':''}">${escapeHTML(orderSummary(o,p))}</span><button class="trackbtn" onclick="window.__track(${o.n})">${action}</button></div></article>`
+ }).join(''):'<div class="empty order-empty"><h3>No orders yet</h3><p>Your purchases, stays and reservations will appear here.</p><button class="primary" onclick="showView(\'shop\')">Continue shopping</button></div>';
+}
+let activeTrackN=null;
+function liveMapHTML(o,p,d){const pct=Math.round(d.progress*100),route='M32 334 L138 334 Q160 334 160 312 L160 254 Q160 232 183 232 L325 232 Q348 232 348 210 L348 135 Q348 114 372 114 L520 114 Q545 114 545 92 L545 65 Q545 48 565 48 L670 48';return `<div class="tracking-grid"><div class="gps-map"><div class="gps-live">Live simulated GPS</div><div class="gps-label start">Crown dispatch</div><div class="gps-label end">Your destination</div><svg viewBox="0 0 700 390" preserveAspectRatio="xMidYMid slice" aria-label="Street delivery map"><rect width="700" height="390" fill="#0d0d0d"/><path class="map-water" d="M0 0h92l32 390H0z"/><path class="map-park" d="M565 252h116v116H565z"/><g class="map-building"><rect x="122" y="24" width="118" height="70" rx="3"/><rect x="272" y="22" width="101" height="73" rx="3"/><rect x="405" y="20" width="113" height="75" rx="3"/><rect x="575" y="82" width="94" height="85" rx="3"/><rect x="104" y="128" width="127" height="80" rx="3"/><rect x="264" y="129" width="60" height="76" rx="3"/><rect x="385" y="145" width="135" height="62" rx="3"/><rect x="105" y="266" width="46" height="91" rx="3"/><rect x="190" y="267" width="130" height="88" rx="3"/><rect x="380" y="261" width="140" height="96" rx="3"/></g><g><path class="map-road" d="M84 114H700M80 232H700M82 370H700M160 0V390M348 0V390M545 0V390"/><path class="map-road-edge" d="M84 114H700M80 232H700M82 370H700M160 0V390M348 0V390M545 0V390"/></g><g class="map-label"><text x="252" y="108">CROWN AVENUE</text><text x="414" y="226">MAISON STREET</text><text x="171" y="361">WEST END ROAD</text><text x="151" y="185" transform="rotate(-90 151 185)">KING STREET</text><text x="339" y="190" transform="rotate(-90 339 190)">ATELIER ROAD</text><text x="575" y="310">PARC NOIR</text></g><path class="map-route-shadow" d="${route}"/><path class="map-route" id="gpsRoute" d="${route}"/><circle id="gpsDot" cx="32" cy="334" r="7" fill="#f6f5f0" stroke="#c8a45d" stroke-width="4"/></svg></div><div class="track-side"><div class="track-kicker">${escapeHTML(orderNumber(o))}</div><h3>${escapeHTML(d.label)}</h3><div class="track-progress"><i style="width:${pct}%"></i></div><div class="track-metric"><small>ETA</small><strong id="gpsEta">${d.done?'Delivered':fmtCountdown(d.eta)}</strong></div><div class="track-metric"><small>Courier / transporter</small><strong>${escapeHTML(d.courier)}</strong></div><div class="track-metric"><small>Approx. distance remaining</small><strong id="gpsDistance">${d.done?'0.0':d.km.toFixed(1)} km</strong></div><div class="track-metric"><small>Total fulfillment time</small><strong>${d.mins} minutes</strong></div><div class="timeline">${d.stages.map((x,i)=>`<div class="timeline-row ${i<d.idx?'done':i===d.idx?'active':''}"><i></i><span>${escapeHTML(x)}</span></div>`).join('')}</div></div></div>`}
+function infoHTML(o,p,mode,inf){const endVal=inf.textB||new Date(inf.b).toLocaleString();const note=mode==='rental'&&p.unit==='hour'?'When the countdown hits zero, your simulated venue rental is over. Yes, the staff are kicking you out.':mode==='rental'?'Your access key is valid only for the booked stay window.':'This purchase is fulfilled as a reservation / handover, not as a parcel delivery.';return `<div class="info-card"><div class="track-kicker">${escapeHTML(orderNumber(o))} • ${escapeHTML(p.brand)}</div><h3>${escapeHTML(inf.title)}</h3><div class="countdown-big ${inf.urgent?'get-out':''}">${escapeHTML(inf.countLabel)} <span id="bookingCountdown">${fmtCountdown(inf.countdown)}</span></div><div class="info-grid"><div><small>${escapeHTML(inf.aLabel)}</small><strong>${new Date(inf.a).toLocaleString()}</strong></div><div><small>${escapeHTML(inf.bLabel)}</small><strong>${escapeHTML(endVal)}</strong></div><div><small>Booked</small><strong>${p.cat==='Rentals'?escapeHTML(unitText(p,o.q)):new Date(o.t).toLocaleString()}</strong></div><div><small>Amount paid</small><strong>${money(o.a)}</strong></div></div><p style="color:#7f7e7a;font-size:11px;line-height:1.65;margin:18px 0 0">${escapeHTML(note)}</p></div>`}
+function renderTrackingModal(){if(activeTrackN==null)return;const o=state.orders.find(x=>x.n===activeTrackN);if(!o)return;const p=PRODUCTS.find(x=>x.id===o.i),mode=fulfillmentMode(p);$('#trackBrand').textContent=`${p.brand} • ${mode==='delivery'?'LIVE FULFILLMENT':mode.toUpperCase()}`;$('#trackTitle').textContent=p.name;if(mode==='delivery'){$('#trackingBody').innerHTML=liveMapHTML(o,p,deliveryProfile(o));requestAnimationFrame(()=>{const path=$('#gpsRoute'),dot=$('#gpsDot');if(path&&dot){const d=deliveryProfile(o),len=path.getTotalLength(),pt=path.getPointAtLength(len*d.progress);dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y)}})}else{const inf=scheduledInfo(o,p,mode);$('#trackingBody').innerHTML=inf?infoHTML(o,p,mode,inf):'<div class="empty">Order confirmed.</div>'}}
+window.__track=n=>{activeTrackN=n;renderTrackingModal();open('trackingModal')};
+
+function compactState(){return {v:1,s:state.seed,o:state.orders.map(o=>[o.i,o.q,o.t,o.a,o.n]),x:roundMoney(state.spent),y:roundMoney(state.saved)}}
+function expandState(d){if(!d||d.v!==1||!Array.isArray(d.o))throw new Error('Unsupported MAISON key.');return {v:1,seed:d.s>>>0,orders:d.o.map(a=>({i:a[0],q:a[1],t:a[2],a:a[3],n:a[4]})),spent:Number(d.x)||0,saved:Number(d.y)||0}}
+async function encodeMaison(){const raw=JSON.stringify(compactState());try{const zipped=await gzip(raw);if(zipped&&zipped.length+5<raw.length)return'MSN1.G.'+bytesToB64u(zipped)}catch(e){}return'MSN1.J.'+utf8ToBase64URL(raw)}
+async function decodeMaison(token){token=token.trim();if(token.startsWith('MSN1.G.'))return expandState(JSON.parse(await gunzip(b64uToBytes(token.slice(7)))));if(token.startsWith('MSN1.J.'))return expandState(JSON.parse(base64URLToUTF8(token.slice(7))));throw new Error('This is not a MAISON MSN1 key.')}
+async function refreshMaisonKey(){const k=await encodeMaison();$('#currentMaison').textContent=k;return k}
+
+function decodeLedgerToken(token){token=token.trim();if(!token.startsWith('LEDGER1.'))throw new Error('This is not a Ledgered LEDGER1 token.');const data=JSON.parse(base64URLToUTF8(token.slice(8)));if(!data||typeof data.name!=='string'||!Array.isArray(data.accounts)||!Array.isArray(data.transactions))throw new Error('Invalid Ledgered token data.');data.accounts=data.accounts.map(a=>({id:a.id||rid(),name:String(a.name||'Account'),type:String(a.type||'Other'),balance:roundMoney(Number(a.balance)||0)}));data.transactions=data.transactions.slice(0,15);return data}
+function encodeLedgerToken(data){const payload={version:1,name:data.name,accounts:data.accounts,transactions:data.transactions.slice(0,15)};return'LEDGER1.'+utf8ToBase64URL(JSON.stringify(payload))}
+function renderLedgerAccounts(){const sel=$('#ledgerAccount');sel.innerHTML=parsedLedger.accounts.map((a,i)=>`<option value="${i}">${escapeHTML(a.name)} — ${money(a.balance)}</option>`).join('');$('#ledgerFields').classList.remove('hidden');updateLedgerBalance()}
+function updateLedgerBalance(){const a=parsedLedger?.accounts[Number($('#ledgerAccount').value)||0];$('#ledgerBalance').textContent=a?money(a.balance):''}
+
+function open(id){$('#'+id).classList.add('open')}function close(id){$('#'+id).classList.remove('open')}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2200)}
+async function copyText(t){try{await navigator.clipboard.writeText(t);toast('Copied.')}catch(e){toast('Select the key and copy it manually.')}}
+function showView(v){$$('.view').forEach(x=>x.classList.toggle('active',x.id==='view-'+v));$$('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));if(v==='orders')renderOrders();window.scrollTo(0,0)}
+
+$$('[data-view]').forEach(b=>b.onclick=()=>showView(b.dataset.view));$$('[data-close]').forEach(b=>b.onclick=()=>close(b.dataset.close));$$('.modalback').forEach(m=>m.onclick=e=>{if(e.target===m&&m.id!=='authModal')close(m.id)});
+const openKeyPanel=async()=>{await refreshMaisonKey();open('accountModal')};
+$('#cartBtn').onclick=()=>{renderCart();open('cartModal')};$('#accountBtn').onclick=openKeyPanel;$('#mobileKeyBtn').onclick=openKeyPanel;
+$('#loginTab').onclick=()=>setAuthMode('login');$('#signupTab').onclick=()=>setAuthMode('signup');
+$('#authForm').onsubmit=async e=>{e.preventDefault();$('#authError').textContent='';if(authMode==='signup'){state={v:1,seed:(crypto.getRandomValues(new Uint32Array(1))[0]>>>0),orders:[],spent:0,saved:0};cart=[];renderCartCount();renderOrders();unlockWithKey();await refreshMaisonKey();open('accountModal');toast('MAISON key created. Save it somewhere safe.');return}try{const loaded=await decodeMaison($('#authKey').value);state=loaded;cart=[];renderCartCount();renderOrders();$('#authKey').value='';unlockWithKey();await refreshMaisonKey();toast('MAISON key accepted.')}catch(err){$('#authError').textContent=err.message||'That MAISON key could not be opened.'}};
+$('#logoutBtn').onclick=()=>{keyAuthenticated=false;state={v:1,seed:(crypto.getRandomValues(new Uint32Array(1))[0]>>>0),orders:[],spent:0,saved:0};cart=[];renderCartCount();renderOrders();close('accountModal');$('#authForm').reset();requireAuth();toast('Signed out. Use your MAISON key to return.')};
+$('#search').oninput=e=>{query=e.target.value.trim().toLowerCase();displayLimit=32;renderProducts()};
+$('#loadMoreBtn').onclick=()=>{displayLimit+=32;renderProducts()};
+
+$('#checkoutBtn').onclick=()=>{if(!cart.length)return;$('#chargeTotal').textContent=money(cartCalc().total);$('#ledgerFields').classList.add('hidden');$('#checkoutResult').classList.add('hidden');parsedLedger=null;$('#ledgerToken').value='';close('cartModal');open('checkoutModal')};
+$('#readLedger').onclick=()=>{try{parsedLedger=decodeLedgerToken($('#ledgerToken').value);$('#ledgerToken').value='';renderLedgerAccounts();toast('Ledgered accounts loaded.')}catch(e){parsedLedger=null;$('#ledgerFields').classList.add('hidden');toast(e.message||'Could not read Ledgered token.')}};
+$('#ledgerAccount').onchange=updateLedgerBalance;
+let lastReceiptText='';
+$('#placeOrder').onclick=async()=>{if(!parsedLedger||!cart.length)return;const calc=cartCalc(),idx=Number($('#ledgerAccount').value)||0,a=parsedLedger.accounts[idx];if(!a)return;if(calc.total>a.balance+.005)return toast('That Ledgered account does not have enough funds.');for(const x of cart){const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p);if(m.stock===0||(p.cat!=='Rentals'&&x.q>m.stock))return toast(`${p.name} is no longer available in that quantity.`)}const purchased=cart.map(x=>({...x})),paidAt=Date.now(),receiptNo='MR-'+String(hash32(`${state.seed}:${paidAt}:${state.orders.length}`)%90000000+10000000);a.balance=roundMoney(Math.max(0,a.balance-calc.total));parsedLedger.transactions.unshift({id:rid(),type:'out',title:'MAISON purchase',description:`MAISON receipt ${receiptNo}`,amount:calc.total,account:a.name,date:paidAt});parsedLedger.transactions=parsedLedger.transactions.slice(0,15);let n0=state.orders.length;for(const x of purchased){const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p);state.orders.push({i:p.id,q:x.q,t:paidAt,a:roundMoney(m.price*x.q),n:++n0})}state.spent=roundMoney(state.spent+calc.total);state.saved=roundMoney(state.saved+calc.save);const ledgerKey=encodeLedgerToken(parsedLedger),maisonKey=await encodeMaison();$('#receiptNumber').textContent=receiptNo;$('#receiptDate').textContent=new Date(paidAt).toLocaleString();$('#receiptAccount').textContent=a.name;$('#receiptItems').innerHTML=purchased.map(x=>{const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p),qty=p.cat==='Rentals'?unitText(p,x.q):`Qty ${x.q}`;return `<div class="receipt-line"><div><b>${escapeHTML(p.name)}</b><span>${escapeHTML(p.brand)} · ${escapeHTML(qty)}</span></div><strong>${money(m.price*x.q)}</strong></div>`}).join('');$('#receiptTotal').textContent=money(calc.total);$('#updatedLedger').textContent=ledgerKey;$('#updatedMaison').textContent=maisonKey;lastReceiptText=['MAISON — ORDER RECEIPT',`Receipt: ${receiptNo}`,`Date: ${new Date(paidAt).toLocaleString()}`,`Paid from: ${a.name}`,'',...purchased.map(x=>{const p=PRODUCTS.find(y=>y.id===x.id),m=marketState(p);return `${p.name} — ${p.cat==='Rentals'?unitText(p,x.q):`Qty ${x.q}`} — ${money(m.price*x.q)}`;}),'',`TOTAL PAID: ${money(calc.total)}`,'','UPDATED LEDGERED KEY:',ledgerKey,'','UPDATED MAISON KEY:',maisonKey].join('\n');$('#checkoutResult').classList.remove('hidden');$('#ledgerFields').classList.add('hidden');cart=[];renderCartCount();renderOrders();refreshMaisonKey();toast('Order placed. Your receipt is ready.')};
+$('#copyReceipt').onclick=()=>copyText(lastReceiptText);$('#downloadReceipt').onclick=()=>{if(!lastReceiptText)return;const blob=new Blob([lastReceiptText],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`MAISON-${$('#receiptNumber').textContent||'receipt'}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+$('#copyLedger').onclick=()=>copyText($('#updatedLedger').textContent);$('#copyMaison').onclick=()=>copyText($('#updatedMaison').textContent);$('#copyCurrentMaison').onclick=()=>copyText($('#currentMaison').textContent);
+$('#loadMaison').onclick=async()=>{try{state=await decodeMaison($('#maisonInput').value);$('#maisonInput').value='';await refreshMaisonKey();renderOrders();toast('MAISON key loaded.')}catch(e){toast(e.message||'Could not load MAISON key.')}};
+
+
+function updateHero(){const slot=Math.floor(Date.now()/(3*3600e3)),pick=PRODUCTS[Math.floor(rand('hero'+slot)*PRODUCTS.length)],disc=10+Math.floor(rand('herod'+slot)*31),end=(slot+1)*3*3600e3;$('#heroOfferName').textContent=pick.name;$('#heroOfferPrice').textContent=money(pick.price*(1-disc/100));$('#heroOfferTime').textContent=fmtLeft(end-Date.now())}
+renderChips();renderProducts();renderCartCount();renderOrders();refreshMaisonKey();updateHero();requireAuth();
+setInterval(()=>{updateHero();if($('#trackingModal').classList.contains('open'))renderTrackingModal();if($('#view-orders').classList.contains('active'))renderOrders()},1000);setInterval(renderProducts,30000);
+})();
+</script>
+</body>
+</html>
